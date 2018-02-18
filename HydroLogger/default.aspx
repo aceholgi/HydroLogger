@@ -19,30 +19,40 @@
         <div class="menu-item"><span>Einstellungen</span></div>
     </div>
 
-    <div id="chart_Wohnzimmer" class="ct-chart ct-double-octave">
-        <span class="chartName">Wohnzimmer</span>
+    <div class="dualChartContainer">
+        <span class="chartName">Wohnzimmer (°C)</span>
+        <div id="chart_temp_wohnzimmer" class="tempChart ct-chart ct-double-octave"></div>
+        <span class="chartName">Wohnzimmer (%)</span>
+        <div id="chart_humid_wohnzimmer" class="humidChart ct-chart ct-double-octave"></div>
     </div>
-
 </body>
 </html>
 
 <script src="Layouts/js/chartist.js"></script>
 <script type="text/javascript">
 
-    var data = {
-        labels: [<%=Labels%>],
-        series: [
-            [<%=SeriesTemp%> ],   //temp
-            [<%=SeriesHumid%>]   //humid
-        ]
+    var data_temp_wohnzimmer = {
+        //labels: [],
+        //series: [
+        //    [ ]
+        //]
+    };
+
+    var data_humid_wohnzimmer = {
+        //labels: [],
+        //series: [
+        //    [ ]
+        //]
     };
 
     var options = {
-        high: 100,
-        low: 0,
+        //high: 100,
+        //low: 0,
+        showPoint: false,
         axisX: {
             showGrid: false
         }
     };
-    new Chartist.Line('#chart_Wohnzimmer', data, options);
+    new Chartist.Line('#chart_temp_wohnzimmer', data_temp_wohnzimmer, options);
+    new Chartist.Line('#chart_humid_wohnzimmer', data_humid_wohnzimmer, options);
 </script>

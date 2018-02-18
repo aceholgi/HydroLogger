@@ -114,6 +114,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Constants.cs" />
+    <Compile Include="Code\DTO\BisonCollectionDTO.cs" />
+    <Compile Include="Code\DTO\CollectionDTO.cs" />
     <Compile Include="Code\DTO\HydroItem.cs" />
     <Compile Include="Code\MailManager.cs" />
     <Compile Include="Code\MongoManager.cs" />

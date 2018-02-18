@@ -12,13 +12,11 @@ namespace HydroLogger
         private bool _isAuthenticated = false;
         private string _action = "";
         private string _position = "";
-        private string _temp = "";
-        private string _hum = "";
+        private string _temperature = "";
+        private string _humidity = "";
         private string _apisecret = "";
 
-        public string SeriesTemp = "[]";
-        public string SeriesHumid = "[]";
-        public string Labels = "[]";
+        public string JsonData = "{}";
 
         private MongoManager mongoManager;
 
@@ -33,35 +31,13 @@ namespace HydroLogger
 
                 if (_isAuthenticated && _action == "AddRecord")
                 {
-                    mongoManager.Insert(new HydroItem { Date = DateTime.Now, Humidity = _hum, Position = _position, Temperature = _temp });
+                    mongoManager.Insert(new HydroItem(DateTime.Now, _position, _humidity, _temperature));
                     Server.Transfer(null);
                     return;
                 }
 
-                List<HydroItem> allItems = mongoManager.SelectAll();
+                var i = mongoManager.SelectAllCollectionItemsConcattet();
 
-                List<string> temps = new List<string>();
-                List<string> humids = new List<string>();
-                List<string> dates = new List<string>();
-
-                int index = 20;
-                foreach (HydroItem item in allItems)
-                {
-                    index++;
-                    temps.Add(item.Temperature);
-                    humids.Add(item.Humidity);
-                    if (index == 30)
-                    {
-                        dates.Add("'" + item.Date.ToString("HH:mm") + "'");
-                        index = 0;
-                    }
-                    else
-                        dates.Add("''");
-                }
-
-                SeriesTemp = _ConcatList(temps);
-                SeriesHumid = _ConcatList(humids);
-                Labels = _ConcatList(dates);
             }
             catch (Exception ex)
             {
@@ -75,9 +51,9 @@ namespace HydroLogger
             if (!string.IsNullOrEmpty(Request.Params.Get("position")))
                 _position = Request.Params.Get("position");
             if (!string.IsNullOrEmpty(Request.Params.Get("temp")))
-                _temp = Request.Params.Get("temp");
+                _temperature = Request.Params.Get("temp");
             if (!string.IsNullOrEmpty(Request.Params.Get("hum")))
-                _hum = Request.Params.Get("hum");
+                _humidity = Request.Params.Get("hum");
             if (!string.IsNullOrEmpty(Request.Params.Get("apisecret")))
                 _apisecret = Request.Params.Get("apisecret");
 
@@ -90,15 +66,6 @@ namespace HydroLogger
                 if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.ApiSecret].ToString() + "" == apiSecretParam)
                     return true;
             return false;
-        }
-
-        private string _ConcatList(List<string> list)
-        {
-            string ret = "";
-            foreach (string s in list)
-                ret += s + ',';
-
-            return ret.Substring(0, ret.Length - 1);
         }
     }
 }

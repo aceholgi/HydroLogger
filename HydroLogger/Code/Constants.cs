@@ -11,7 +11,7 @@
 
         public static class Database
         {
-            public static readonly string CollectionName = "entries";
+            public static readonly string CollectionName = "entries_";
 
             public static readonly string Date = "Date";
             public static readonly string Humidity = "Humidity";

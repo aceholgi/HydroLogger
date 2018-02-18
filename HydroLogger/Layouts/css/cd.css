@@ -22,26 +22,32 @@ body .menu-bar .menu-item {
 body .menu-bar .menu-item > span {
   font-weight: 600;
 }
-body .ct-chart .chartName {
+body .dualChartContainer .chartName {
   padding-left: 64px;
-  font-size: 2.3vw;
+  font-size: 0.8vw;
   color: #616161;
+  float: left;
+  position: absolute;
 }
-body .ct-chart .ct-grid {
-  stroke: rgba(0, 0, 0, 0.4) !important;
-}
-body .ct-chart .ct-label {
-  color: rgba(0, 0, 0, 0.8) !important;
-}
-body #chart_Wohnzimmer .ct-series-a .ct-point {
+body .dualChartContainer .tempChart .ct-series-a .ct-point {
   stroke: #3f51b5 !important;
 }
-body #chart_Wohnzimmer .ct-series-a .ct-line {
+body .dualChartContainer .tempChart .ct-series-a .ct-line {
   stroke: #757de8 !important;
 }
-body #chart_Wohnzimmer .ct-series-b .ct-point {
+body .dualChartContainer .humidChart .ct-series-a .ct-point {
   stroke: #ffa000 !important;
 }
-body #chart_Wohnzimmer .ct-series-b .ct-line {
+body .dualChartContainer .humidChart .ct-series-a .ct-line {
   stroke: #ffd149 !important;
+}
+body .dualChartContainer .ct-chart {
+  width: 50%;
+  float: left;
+}
+body .dualChartContainer .ct-chart .ct-grid {
+  stroke: rgba(0, 0, 0, 0.4) !important;
+}
+body .dualChartContainer .ct-chart .ct-label {
+  color: rgba(0, 0, 0, 0.8) !important;
 }

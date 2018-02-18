@@ -41,37 +41,46 @@ body {
         }
     }
 
-    .ct-chart {
+    .dualChartContainer {
         .chartName {
             padding-left: 64px;
-            font-size: 2.3vw;
+            font-size: 0.8vw;
             color: @materialSecondary;
+            float: left;
+            position: absolute;
         }
 
-        .ct-grid {
-            stroke: rgba(0, 0, 0, 0.4) !important;
+        .tempChart {
+            .ct-series-a .ct-point {
+                stroke: @tempPoint !important;
+            }
+
+            .ct-series-a .ct-line {
+                stroke: @tempLine !important;
+            }
         }
 
-        .ct-label {
-            color: rgba(0, 0, 0, 0.8) !important;
-        }
-    }
+        .humidChart {
+            .ct-series-a .ct-point {
+                stroke: @humidPoint !important;
+            }
 
-    #chart_Wohnzimmer {
-        .ct-series-a .ct-point {
-            stroke: @tempPoint !important;
-        }
-
-        .ct-series-a .ct-line {
-            stroke: @tempLine !important;
+            .ct-series-a .ct-line {
+                stroke: @humudLine !important;
+            }
         }
 
-        .ct-series-b .ct-point {
-            stroke: @humidPoint !important;
-        }
+        .ct-chart {
+            width: 50%;
+            float: left;
 
-        .ct-series-b .ct-line {
-            stroke: @humudLine !important;
+            .ct-grid {
+                stroke: rgba(0, 0, 0, 0.4) !important;
+            }
+
+            .ct-label {
+                color: rgba(0, 0, 0, 0.8) !important;
+            }
         }
     }
 }
