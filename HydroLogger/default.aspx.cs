@@ -49,17 +49,16 @@ namespace HydroLogger
                 {
                     temps.Add(item.Temperature);
                     humids.Add(item.Humidity);
-                    dates.Add(item.Date + "");
+                    if (index == 20)
+                    {
+                        dates.Add(item.Date + "");
+                        index = 0;
+                    }
                 }
 
                 SeriesTemp = _ConcatList(temps);
                 SeriesHumid = _ConcatList(humids);
-                if (index == 20)
-                {
-                    Labels = _ConcatList(dates);
-                    index = 0;
-                }
-
+                Labels = _ConcatList(dates);
             }
             catch (Exception ex)
             {
