@@ -44,18 +44,19 @@ namespace HydroLogger
                 List<string> humids = new List<string>();
                 List<string> dates = new List<string>();
 
-                int index = 0;
+                int index = 20;
                 foreach (HydroItem item in allItems)
                 {
                     index++;
                     temps.Add(item.Temperature);
                     humids.Add(item.Humidity);
-                    if (index == 20)
+                    if (index == 30)
                     {
-                        dates.Add(item.Date + "");
+                        dates.Add("'" + item.Date.ToString("HH:mm") + "'");
                         index = 0;
                     }
-                    
+                    else
+                        dates.Add("''");
                 }
 
                 SeriesTemp = _ConcatList(temps);
