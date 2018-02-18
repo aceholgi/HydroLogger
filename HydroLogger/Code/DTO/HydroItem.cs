@@ -23,32 +23,39 @@ namespace HydroLogger.Code.DTO
             Humidity = humidity;
         }
 
-        public bool isValid()
+        public bool IsValid()
         {
             return Date != null && Date.Ticks > 0 && !string.IsNullOrEmpty(Position) && !string.IsNullOrEmpty(Temperature) && Temperature != "nan" && !string.IsNullOrEmpty(Humidity) && Humidity != "nan";
         }
 
         public BsonDocument ItemToBson()
         {
-            BsonDocument doc = new BsonDocument
+            try
+            {
+                BsonDocument doc = new BsonDocument
                 {
-                    {Constants.Database.Date, Date },
+                    {Constants.Database.Date, Date},
                     {Constants.Database.Humidity, Humidity },
                     {Constants.Database.Temperature, Temperature },
-                    {Constants.Database.Position, Position },
+                    {Constants.Database.Position, Position},
                 };
-            return doc;
+                return doc;
+            }
+            catch (Exception ex)
+            {
+                return new BsonDocument();
+            }
         }
 
         public HydroItem(BsonDocument document)
         {
             DateTime d = new DateTime(0);
-            DateTime.TryParse(document.GetElement(Constants.Database.Date) + "", out d);
+            DateTime.TryParse(document.GetElement(Constants.Database.Date).Value + "", out d);
             Date = d;
 
-            Position = document.GetElement(Constants.Database.Humidity) + "";
-            Temperature = document.GetElement(Constants.Database.Temperature) + "";
-            Humidity = document.GetElement(Constants.Database.Position) + "";
+            Position = document.GetElement(Constants.Database.Position).Value + "";
+            Temperature = document.GetElement(Constants.Database.Temperature).Value + "";
+            Humidity = document.GetElement(Constants.Database.Humidity).Value + "";
         }
     }
 }

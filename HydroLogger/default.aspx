@@ -7,8 +7,8 @@
     <title>Temperaturübewachung</title>
 
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
-    <link href="Layouts/css/cd.css" type="text/css" rel="stylesheet" />    
-    <link href="Layouts/css/chartist.css" rel="stylesheet"  />
+    <link href="Layouts/css/cd.css" type="text/css" rel="stylesheet" />
+    <link href="Layouts/css/chartist.css" rel="stylesheet" />
     <link href="Images/favicon.png" rel="icon" />
 </head>
 
@@ -30,10 +30,10 @@
 <script type="text/javascript">
 
     var data = {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        labels: [<%=Labels%>],
         series: [
-            [20, 21, 19, 20, 25],   //temp
-            [55, 60, 35, 30, 45]    //humid
+            [<%=SeriesTemp%> ],   //temp
+            [<%=SeriesHumid%>]   //humid
         ]
     };
 

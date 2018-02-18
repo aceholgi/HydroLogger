@@ -2,6 +2,7 @@
 using HydroLogger.Code.DTO;
 using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace HydroLogger
@@ -15,6 +16,10 @@ namespace HydroLogger
         private string _hum = "";
         private string _apisecret = "";
 
+        public string SeriesTemp = "[]";
+        public string SeriesHumid = "[]";
+        public string Labels = "[]";
+
         private MongoManager mongoManager;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -23,10 +28,38 @@ namespace HydroLogger
             {
                 _setParamVars();
 
-                if (_isAuthenticated)
-                    _AuthenticatedBlock();
-                else
-                    _UnauthenticatedBlock();
+                if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo] != null)
+                    mongoManager = new MongoManager(new MongoUrl(ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo].ToString()));
+
+                if (_isAuthenticated && _action == "AddRecord")
+                {
+                    mongoManager.Insert(new HydroItem { Date = DateTime.Now, Humidity = _hum, Position = _position, Temperature = _temp });
+                    Server.Transfer(null);
+                    return;
+                }
+
+                List<HydroItem> allItems = mongoManager.SelectAll();
+
+                List<string> temps = new List<string>();
+                List<string> humids = new List<string>();
+                List<string> dates = new List<string>();
+
+                int index = 0;
+                foreach (HydroItem item in allItems)
+                {
+                    temps.Add(item.Temperature);
+                    humids.Add(item.Humidity);
+                    dates.Add(item.Date + "");
+                }
+
+                SeriesTemp = _ConcatList(temps);
+                SeriesHumid = _ConcatList(humids);
+                if (index == 20)
+                {
+                    Labels = _ConcatList(dates);
+                    index = 0;
+                }
+
             }
             catch (Exception ex)
             {
@@ -57,24 +90,13 @@ namespace HydroLogger
             return false;
         }
 
-        private void _AuthenticatedBlock()
+        private string _ConcatList(List<string> list)
         {
-            if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo] != null)
-                mongoManager = new MongoManager(new MongoUrl(ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo].ToString()));
+            string ret = "";
+            foreach (string s in list)
+                ret += s + ',';
 
-            switch (_action)
-            {
-                case "AddRecord":
-                    mongoManager.Insert(new HydroItem { Date = DateTime.Now, Humidity = _hum, Position = _position, Temperature = _temp });
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void _UnauthenticatedBlock()
-        {
-
+            return ret.Substring(0, ret.Length - 1);
         }
     }
 }
