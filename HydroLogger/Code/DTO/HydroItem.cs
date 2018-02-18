@@ -23,6 +23,11 @@ namespace HydroLogger.Code.DTO
             Humidity = humidity;
         }
 
+        public bool isValid()
+        {
+            return Date != null && Date.Ticks > 0 && !string.IsNullOrEmpty(Position) && !string.IsNullOrEmpty(Temperature) && Temperature != "nan" && !string.IsNullOrEmpty(Humidity) && Humidity != "nan";
+        }
+
         public BsonDocument ItemToBson()
         {
             BsonDocument doc = new BsonDocument

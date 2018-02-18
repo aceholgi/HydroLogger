@@ -85,6 +85,17 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Images\favicon.png" />
+    <Content Include="Layouts\css\chartist.css" />
+    <Content Include="Layouts\js\chartist.js" />
+    <Content Include="Layouts\css\cd.css">
+      <DependentUpon>cd.less</DependentUpon>
+    </Content>
+    <Content Include="Layouts\css\cd.less" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HydroLogger-Leon - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
@@ -96,11 +107,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="default.aspx" />
+    <Content Include="Layouts\css\cd.min.css">
+      <DependentUpon>cd.css</DependentUpon>
+    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\DTO\HydroItem.cs" />
+    <Compile Include="Code\MailManager.cs" />
     <Compile Include="Code\MongoManager.cs" />
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>
