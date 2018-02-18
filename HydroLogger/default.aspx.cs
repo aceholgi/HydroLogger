@@ -47,6 +47,7 @@ namespace HydroLogger
                 int index = 0;
                 foreach (HydroItem item in allItems)
                 {
+                    index++;
                     temps.Add(item.Temperature);
                     humids.Add(item.Humidity);
                     if (index == 20)
@@ -54,6 +55,7 @@ namespace HydroLogger
                         dates.Add(item.Date + "");
                         index = 0;
                     }
+                    
                 }
 
                 SeriesTemp = _ConcatList(temps);
