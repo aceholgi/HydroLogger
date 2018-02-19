@@ -25,7 +25,7 @@ function CreateChart(name, temperatures, humiditys, dates)
     let options = {
         //high: 100,
         //low: 0,
-        showPoint: false,
+        //showPoint: false,
         axisX: {
             showGrid: false
         }
@@ -83,7 +83,15 @@ function beautifyDates(dates, spacing)
         if (i % spacing == 0)
         {
             let d = new Date(dates[i]);
-            newDates.push(d.getHours() + ':' + d.getMinutes());
+            let hours = d.getHours();
+            let minutes = d.getMinutes();
+
+            if (hours == 0)
+                hours = '00';
+            if (minutes == 0)
+                minutes = '00';
+
+            newDates.push(hours + ':' + minutes);
         }
         else
             newDates.push('');
