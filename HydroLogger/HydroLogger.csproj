@@ -91,11 +91,15 @@
     </None>
     <Content Include="Images\favicon.png" />
     <Content Include="Layouts\css\chartist.css" />
-    <Content Include="Layouts\js\chartist.js" />
-    <Content Include="Layouts\css\cd.css">
-      <DependentUpon>cd.less</DependentUpon>
+    <Content Include="Layouts\css\overview.css">
+      <DependentUpon>overview.less</DependentUpon>
     </Content>
-    <Content Include="Layouts\css\cd.less" />
+    <Content Include="Layouts\css\overview.min.css">
+      <DependentUpon>overview.css</DependentUpon>
+    </Content>
+    <Content Include="Layouts\js\chartist.js" />
+    <Content Include="Layouts\css\overview.less" />
+    <Content Include="Layouts\css\_cd.less" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HydroLogger-Leon - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
@@ -106,10 +110,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="default.aspx" />
-    <Content Include="Layouts\css\cd.min.css">
-      <DependentUpon>cd.css</DependentUpon>
-    </Content>
+    <Content Include="Layouts\js\overview.js" />
+    <Content Include="Overview.aspx" />
+    <Content Include="Uploader.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -117,16 +120,24 @@
     <Compile Include="Code\DTO\BisonCollectionDTO.cs" />
     <Compile Include="Code\DTO\CollectionDTO.cs" />
     <Compile Include="Code\DTO\HydroItem.cs" />
-    <Compile Include="Code\MailManager.cs" />
-    <Compile Include="Code\MongoManager.cs" />
-    <Compile Include="default.aspx.cs">
-      <DependentUpon>default.aspx</DependentUpon>
+    <Compile Include="Code\Manager\AuthentificationManager.cs" />
+    <Compile Include="Code\Manager\MailManager.cs" />
+    <Compile Include="Code\Manager\MongoManager.cs" />
+    <Compile Include="Overview.aspx.cs">
+      <DependentUpon>Overview.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="default.aspx.designer.cs">
-      <DependentUpon>default.aspx</DependentUpon>
+    <Compile Include="Overview.aspx.designer.cs">
+      <DependentUpon>Overview.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Uploader.aspx.cs">
+      <DependentUpon>Uploader.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Uploader.aspx.designer.cs">
+      <DependentUpon>Uploader.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

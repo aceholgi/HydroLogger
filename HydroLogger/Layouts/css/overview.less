@@ -1,0 +1,78 @@
+﻿@import "_cd.less";
+
+body {
+    font-family: 'Raleway', sans-serif;
+
+    .menu-bar {
+        width: 100%;
+        height: 50px;
+        margin-bottom: 15px;
+        //border: 1px solid black;
+        text-align: center;
+
+        .menu-item {
+            margin: 0 10px;
+            width: 110px;
+            height: 30px;
+            position: relative;
+            float: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-177%, -50%);
+            //border: 1px solid black;
+            cursor: pointer;
+            color: @materialSecondaryDark;
+
+            > span {
+                font-weight: 600;
+            }
+        }
+    }
+
+    .dual-chart-container {
+        .chart-container {
+            width: 50%;
+            float: left;
+
+            .chart-name {
+                padding-left: 64px;
+                font-size: 0.8vw;
+                color: @materialSecondary;
+                float: left;
+                position: absolute;
+            }
+
+            .temperature-chart {
+                .ct-series-a .ct-point {
+                    stroke: @tempPoint !important;
+                }
+
+                .ct-series-a .ct-line {
+                    stroke: @tempLine !important;
+                }
+            }
+
+            .humidity-chart {
+                .ct-series-a .ct-point {
+                    stroke: @humidPoint !important;
+                }
+
+                .ct-series-a .ct-line {
+                    stroke: @humudLine !important;
+                }
+            }
+
+            .ct-chart {
+
+
+                .ct-grid {
+                    stroke: rgba(0, 0, 0, 0.4) !important;
+                }
+
+                .ct-label {
+                    color: rgba(0, 0, 0, 0.8) !important;
+                }
+            }
+        }
+    }
+}

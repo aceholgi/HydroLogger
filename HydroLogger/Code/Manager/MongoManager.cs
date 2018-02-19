@@ -1,12 +1,12 @@
 ﻿using HydroLogger.Code.DTO;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Web;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Web.Script.Serialization;
 
-namespace HydroLogger.Code
+namespace HydroLogger.Code.Manager
 {
     public class MongoManager
     {
@@ -32,15 +32,17 @@ namespace HydroLogger.Code
                 if (!item.IsValid())
                     return;
 
+                string name = HttpUtility.HtmlEncode(item.Position);
+
                 MongoClient client = new MongoClient(_url);
                 IMongoDatabase database = client.GetDatabase(_url.DatabaseName);
 
-                var collection = database.GetCollection<BsonDocument>(Constants.Database.CollectionName + item.Position);
+                var collection = database.GetCollection<BsonDocument>(Constants.Database.CollectionName + name);
 
                 if (collection == null)
                 {
                     database.CreateCollection(Constants.Database.CollectionName + item.Position);
-                    collection = database.GetCollection<BsonDocument>(Constants.Database.CollectionName + item.Position);
+                    collection = database.GetCollection<BsonDocument>(Constants.Database.CollectionName + name);
                 }
 
                 collection.InsertOne(item.ToBsonDocument());
@@ -102,7 +104,7 @@ namespace HydroLogger.Code
             return collectionItems;
         }
 
-        public List<CollectionDTO> SelectAllCollectionItemsConcattet()
+        public List<CollectionDTO> SelectAllCollectionItems()
         {
             List<CollectionDTO> res = new List<CollectionDTO>();
 
@@ -113,28 +115,19 @@ namespace HydroLogger.Code
                 CollectionDTO collection = new CollectionDTO();
                 if (list.Count > 0)
                 {
-                    collection.Name = list[0].Position;
+                    collection.Name = HttpUtility.HtmlDecode(list[0].Position);
 
                     int index = 20;
                     foreach (HydroItem item in list)
                     {
                         index++;
-                        collection.TemperaturesList.Add(item.Temperature);
-                        collection.HumiditysList.Add(item.Humidity);
-                        if (index == 30)
-                        {
-                            collection.DatesList.Add("'" + item.Date.ToString("HH:mm") + "'");
-                            index = 0;
-                        }
-                        else
-                            collection.DatesList.Add("''");
+                        collection.Temperatures.Add(item.Temperature);
+                        collection.Humiditys.Add(item.Humidity);
+                        collection.Dates.Add(item.Date.ToString("o"));
                     }
-                    collection.Concat();
-
                     res.Add(collection);
                 }
             }
-
             return res;
         }
     }

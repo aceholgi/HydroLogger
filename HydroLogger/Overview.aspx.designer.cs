@@ -10,6 +10,6 @@
 namespace HydroLogger {
     
     
-    public partial class _default {
+    public partial class Overview {
     }
 }

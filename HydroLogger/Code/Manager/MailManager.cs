@@ -6,7 +6,7 @@ using System.Web;
 using System.Net.Mail;
 
 
-namespace HydroLogger.Code
+namespace HydroLogger.Code.Manager
 {
     public static class MailManager
     {

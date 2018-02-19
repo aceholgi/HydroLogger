@@ -22,32 +22,32 @@ body .menu-bar .menu-item {
 body .menu-bar .menu-item > span {
   font-weight: 600;
 }
-body .dualChartContainer .chartName {
+body .dual-chart-container .chart-container {
+  width: 50%;
+  float: left;
+}
+body .dual-chart-container .chart-container .chart-name {
   padding-left: 64px;
   font-size: 0.8vw;
   color: #616161;
   float: left;
   position: absolute;
 }
-body .dualChartContainer .tempChart .ct-series-a .ct-point {
+body .dual-chart-container .chart-container .temperature-chart .ct-series-a .ct-point {
   stroke: #3f51b5 !important;
 }
-body .dualChartContainer .tempChart .ct-series-a .ct-line {
+body .dual-chart-container .chart-container .temperature-chart .ct-series-a .ct-line {
   stroke: #757de8 !important;
 }
-body .dualChartContainer .humidChart .ct-series-a .ct-point {
+body .dual-chart-container .chart-container .humidity-chart .ct-series-a .ct-point {
   stroke: #ffa000 !important;
 }
-body .dualChartContainer .humidChart .ct-series-a .ct-line {
+body .dual-chart-container .chart-container .humidity-chart .ct-series-a .ct-line {
   stroke: #ffd149 !important;
 }
-body .dualChartContainer .ct-chart {
-  width: 50%;
-  float: left;
-}
-body .dualChartContainer .ct-chart .ct-grid {
+body .dual-chart-container .chart-container .ct-chart .ct-grid {
   stroke: rgba(0, 0, 0, 0.4) !important;
 }
-body .dualChartContainer .ct-chart .ct-label {
+body .dual-chart-container .chart-container .ct-chart .ct-label {
   color: rgba(0, 0, 0, 0.8) !important;
 }
