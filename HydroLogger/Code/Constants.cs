@@ -11,12 +11,15 @@
 
         public static class Database
         {
-            public static readonly string CollectionName = "entries_";
+            public static readonly string CollectionNamePrefix = "entries_";
 
-            public static readonly string Date = "Date";
-            public static readonly string Humidity = "Humidity";
-            public static readonly string Temperature = "Temperature";
-            public static readonly string Position = "Position";
+            public static class Fields
+            {
+                public static readonly string Position = "Position";
+                public static readonly string Date = "Date";
+                public static readonly string Temperature = "Temperature";
+                public static readonly string Humidity = "Humidity";
+            }
         }
 
         public static class Mail

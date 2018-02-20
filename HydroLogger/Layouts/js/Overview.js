@@ -1,10 +1,24 @@
 ﻿function CreateCharts(data)
 {
     for (let i = 0; i < data.length; i++)
-        CreateChart(data[i]['Name'], data[i]['Temperatures'], data[i]['Humiditys'], data[i]['Dates']);
+    {
+        let humiditys = [];
+        let temperatures = [];
+        let dates = [];
+
+        for (let j = 0; j < data[i]['HumitureItems'].length; j++)
+        {
+            dates.push(data[i]['HumitureItems'][j]['Date']);
+            temperatures.push(data[i]['HumitureItems'][j]['Temperature']);
+            humiditys.push(data[i]['HumitureItems'][j]['Humidity']);
+        }
+        //dont render empty charts
+        if (humiditys.length > 0)
+            CreateChart(data[i]['Name'], dates, temperatures, humiditys);
+    }
 }
 
-function CreateChart(name, temperatures, humiditys, dates)
+function CreateChart(name, dates, temperatures, humiditys)
 {
     let labels = beautifyDates(dates, 10);
 

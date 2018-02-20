@@ -22,11 +22,11 @@ namespace HydroLogger
             {
                 if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo] != null)
                     mongoManager = new MongoManager(new MongoUrl(ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo].ToString()));
-                
-                JavaScriptSerializer ser = new JavaScriptSerializer();
-                List<CollectionDTO> collections = mongoManager.SelectAllCollectionItems();
+                              
+                List<ResultDTO> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(), FilterBuilder.BuildFilter(DateTime.Now.AddDays(-20), DateTime.Now));
 
-                JsonData = ser.Serialize(collections);
+                JavaScriptSerializer ser = new JavaScriptSerializer();
+                JsonData = ser.Serialize(overviewResults);
             }
             catch (Exception ex)
             {

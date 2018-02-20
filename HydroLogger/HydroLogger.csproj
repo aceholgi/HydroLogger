@@ -118,8 +118,9 @@
   <ItemGroup>
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\DTO\BisonCollectionDTO.cs" />
-    <Compile Include="Code\DTO\CollectionDTO.cs" />
-    <Compile Include="Code\DTO\HydroItem.cs" />
+    <Compile Include="Code\DTO\ResultDTO.cs" />
+    <Compile Include="Code\DTO\HumitureItem.cs" />
+    <Compile Include="Code\FilterBuilder.cs" />
     <Compile Include="Code\Manager\AuthentificationManager.cs" />
     <Compile Include="Code\Manager\MailManager.cs" />
     <Compile Include="Code\Manager\MongoManager.cs" />
