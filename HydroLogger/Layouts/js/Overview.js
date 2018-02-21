@@ -96,7 +96,7 @@ function beautifyDates(dates, spacing)
     {
         if (i % spacing == 0)
         {
-            let d = new Date(dates[i]);
+            let d = new Date(parseInt(dates[i].substring(6, dates[i].length - 2)));
             let hours = d.getHours();
             let minutes = d.getMinutes();
 
