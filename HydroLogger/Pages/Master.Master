@@ -1,0 +1,28 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.master.cs" Inherits="HydroLogger.Pages.Master" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Temperaturübewachung</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
+    <link href="../Layouts/css/common.css" rel="stylesheet" />
+    <link href="../Layouts/css/navigation.css" rel="stylesheet" />
+    <link href="../Layouts/css/chartist.css" rel="stylesheet" />
+    <link href="../Images/favicon.png" rel="icon" />
+
+    <asp:ContentPlaceHolder ID="contentCss" runat="server"></asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="contentScripts" runat="server"></asp:ContentPlaceHolder>
+</head>
+
+<body>
+    <div class="menu-bar">
+        <a class="menu-item" href="../Pages/Overview.aspx"><span>Übersicht</span></a>
+        <a class="menu-item" href="../Pages/Statistics.aspx"><span>Statistiken</span></a>
+        <a class="menu-item" href="../Pages/Settings.aspx"><span>Einstellungen</span></a>
+    </div>
+
+    <asp:ContentPlaceHolder ID="contentBody" runat="server"></asp:ContentPlaceHolder>
+</body>
+</html>
+

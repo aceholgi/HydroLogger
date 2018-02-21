@@ -42,7 +42,7 @@ namespace HydroLogger.Code.Manager
                     collection = _database.GetCollection<BsonDocument>(Constants.Database.CollectionNamePrefix + position);
                 }
 
-                collection.InsertOne(item.ToBsonDocument());
+                collection.InsertOne(item.ToBson());
             }
             catch (Exception ex)
             {

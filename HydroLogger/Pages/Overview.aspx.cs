@@ -8,9 +8,9 @@ using System.Configuration;
 using System.Web.Script.Serialization;
 using System.Web.UI;
 
-namespace HydroLogger
+namespace HydroLogger.Pages
 {
-    public partial class Overview : Page
+    public partial class Overview : System.Web.UI.Page
     {
         public string JsonData = "{}";
 
@@ -22,8 +22,8 @@ namespace HydroLogger
             {
                 if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo] != null)
                     mongoManager = new MongoManager(new MongoUrl(ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo].ToString()));
-                              
-                List<ResultDTO> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(), FilterBuilder.BuildFilter(DateTime.Now.AddDays(-20), DateTime.Now));
+
+                List<ResultDTO> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(), FilterBuilder.BuildFilter(DateTime.Now.AddDays(-1), DateTime.Now));
 
                 JavaScriptSerializer ser = new JavaScriptSerializer();
                 JsonData = ser.Serialize(overviewResults);

@@ -1,13 +1,11 @@
 ﻿using HydroLogger.Code;
 using HydroLogger.Code.DTO;
 using HydroLogger.Code.Manager;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 
-namespace HydroLogger
+namespace HydroLogger.Pages
 {
     public partial class Uploader : System.Web.UI.Page
     {

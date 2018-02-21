@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Web.Script.Serialization;
 
@@ -28,6 +29,17 @@ namespace HydroLogger.Code.DTO
         public bool IsValid()
         {
             return (Date != null && Temperature > 0 && Humidity > 0);
+        }
+
+        public BsonDocument ToBson()
+        {
+            return new BsonDocument
+            {
+                new BsonElement(Constants.Database.Fields.Date, BsonValue.Create(Date)),
+                new BsonElement(Constants.Database.Fields.Temperature, BsonValue.Create(Temperature)),
+                new BsonElement(Constants.Database.Fields.Humidity, BsonValue.Create(Humidity))
+            };
+            
         }
     }
 }

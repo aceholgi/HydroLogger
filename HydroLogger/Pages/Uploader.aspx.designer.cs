@@ -7,9 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HydroLogger {
+namespace HydroLogger.Pages {
     
     
-    public partial class Overview {
+    public partial class Uploader {
     }
 }

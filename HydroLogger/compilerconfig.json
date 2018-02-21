@@ -2,5 +2,13 @@
   {
     "outputFile": "Layouts/css/overview.css",
     "inputFile": "Layouts/css/overview.less"
+  },
+  {
+    "outputFile": "Layouts/css/navigation.css",
+    "inputFile": "Layouts/css/navigation.less"
+  },
+  {
+    "outputFile": "Layouts/css/common.css",
+    "inputFile": "Layouts/css/common.less"
   }
 ]
