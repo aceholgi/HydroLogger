@@ -26,126 +26,126 @@
         },
         CreateChart: function (name, dates, temperatures, humiditys)
         {
-            let labels = HydroLogger.Overview.BeautifyDates(dates, 10);
+            let canvasHeight = 80;
 
-            let dataTemperatures = {
-                labels: labels,
-                series: [
-                    temperatures
-                ]
-            };
+            let container = document.getElementById('allChartContainer');
 
-            let dataHumiditys = {
-                labels: labels,
-                series: [
-                    humiditys
-                ]
-            };
-
-
-            let options = {
-                //high: 100,
-                //low: 0,
-                //showPoint: false,
-                //showArea: true,
-                axisX: {
-                    showGrid: false
-                },
-                //plugins: [
-                //    Chartist.plugins.ctThreshold({
-                //        threshold: 35
-                //    }),
-                //    Chartist.plugins.ctAxisTitle({
-                //        axisX: {
-                //            axisTitle: 'Uhrzeit)',
-                //            axisClass: 'ct-axis-title',
-                //            offset: {
-                //                x: 0,
-                //                y: 50
-                //            },
-                //            textAnchor: 'middle'
-                //        },
-                //        axisY: {
-                //            axisTitle: 'Goals',
-                //            axisClass: 'ct-axis-title',
-                //            offset: {
-                //                x: 0,
-                //                y: 0
-                //            },
-                //            textAnchor: 'middle',
-                //            flipTitle: false
-                //        }
-                //    })
-                //]
-            };
-
-            let container = document.getElementById('chartContainer');
-
-            let dualChartContainer = document.createElement('div');
-            dualChartContainer.classList = 'dual-chart-container';
-
-            //  Temperature
-            let temperatureChart = document.createElement('div');
-            temperatureChart.id = 'chartTemperature' + name;
-            temperatureChart.classList = 'temperature-chart ct-chart ct-double-octave';
-
-            let temperatureDescription = document.createElement('span');
-            temperatureDescription.classList = 'chart-name';
-            temperatureDescription.innerText = name + " (°C)";
-
+            //Temperature
             let temperatureContainer = document.createElement('div');
             temperatureContainer.classList = 'chart-container';
-            temperatureContainer.appendChild(temperatureDescription);
-            temperatureContainer.appendChild(temperatureChart);
 
-            //  Humidity
-            let humidityChart = document.createElement('div');
-            humidityChart.id = 'chartHumidity' + name;
-            humidityChart.classList = 'humidity-chart ct-chart ct-double-octave';
+            temperatureCanvas = document.createElement('canvas');
+            temperatureCanvas.id = 'chart-temperature' + name;
+            temperatureCanvas.classList = 'chart-temperature';
+            temperatureCanvas.height = canvasHeight;
+            
+            temperatureContainer.appendChild(temperatureCanvas);
+            container.appendChild(temperatureContainer);
 
-            let humidityDescription = document.createElement('span');
-            humidityDescription.classList = 'chart-name';
-            humidityDescription.innerText = name + ' (%)';
-
+            //Humidity
             let humidityContainer = document.createElement('div');
             humidityContainer.classList = 'chart-container';
-            humidityContainer.appendChild(humidityDescription);
-            humidityContainer.appendChild(humidityChart);
 
-            //  Appending
-            dualChartContainer.appendChild(temperatureContainer);
-            dualChartContainer.appendChild(humidityContainer);
+            humidityCanvas = document.createElement('canvas');
+            humidityCanvas.id = 'chart-humidity' + name;
+            humidityCanvas.classList = 'chart-humidity';
+            humidityCanvas.height = canvasHeight;
+            
+            humidityContainer.appendChild(humidityCanvas);           
+            container.appendChild(humidityContainer);
 
-            container.appendChild(dualChartContainer);
 
-            new Chartist.Line('#chartTemperature' + name, dataTemperatures, options)
-            new Chartist.Line('#chartHumidity' + name, dataHumiditys, options)
-        },
-        BeautifyDates: function (dates, spacing)
-        {
-            let newDates = [];
+            let ctxTemperature = document.getElementById('chart-temperature' + name).getContext('2d');
+            let ctxHumidity = document.getElementById('chart-humidity' + name).getContext('2d');
 
-            for (let i = 0; i < dates.length; i++)
-            {
-                if (i % spacing == 0)
-                {
-                    let d = new Date(parseInt(dates[i].substring(6, dates[i].length - 2)));
-                    let hours = d.getHours();
-                    let minutes = d.getMinutes();
-
-                    if (hours == 0)
-                        hours = '00';
-                    if (minutes == 0)
-                        minutes = '00';
-                    if (minutes.toString().length == 1)
-                        minutes = '0' + minutes;
-
-                    newDates.push(hours + ':' + minutes);
+            let options = {
+                scales: {
+                    maintainAspectRatio: false,
+                    xAxes: [{
+                        type: 'time',
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Uhrzeit'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Temperatur'
+                        }
+                    }]
                 }
-                else
-                    newDates.push('');
+            };
+
+            let chartTemperature = new Chart(ctxTemperature, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: name + ' Temperatur',
+                        data: HydroLogger.Overview.PrepareData(temperatures, dates),
+                        backgroundColor: 'green',
+                        borderColor: 'green',
+                        fill: false
+                    }]
+                },
+                options: options
+            });
+
+            let chartHumidity = new Chart(ctxHumidity, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: name + ' Luftfeuchtigkeit',
+                        data: HydroLogger.Overview.PrepareData(humiditys, dates),
+                        backgroundColor: 'blue',
+                        borderColor: 'blue',
+                        fill: false,
+                    }]
+                },
+                options: options
+            });
+
+            /*
+blue
+:
+"rgb(54, 162, 235)"
+green
+:
+"rgb(75, 192, 192)"
+grey
+:
+"rgb(201, 203, 207)"
+orange
+:
+"rgb(255, 159, 64)"
+purple
+:
+"rgb(153, 102, 255)"
+red
+:
+"rgb(255, 99, 132)"
+yellow
+:
+"rgb(255, 205, 86)"
+            */
+
+        },
+        PrepareData: function (values, dates)
+        {
+            let ret = [];
+
+            for (let i = 0; i < values.length; i++)
+            {
+                let obj = {};
+                obj['x'] = new Date(parseInt(dates[i].substring(6, dates[i].length - 2)));
+                obj['y'] = values[i];
+
+                ret.push(obj)
             }
-            return newDates;
+
+            return ret;
         }
     }
 })(window.HydroLogger = window.HydroLogger || {})

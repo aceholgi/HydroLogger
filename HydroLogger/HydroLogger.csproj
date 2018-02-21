@@ -90,7 +90,6 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="Images\favicon.png" />
-    <Content Include="Layouts\css\chartist.css" />
     <Content Include="Layouts\css\common.css">
       <DependentUpon>common.less</DependentUpon>
     </Content>
@@ -109,15 +108,13 @@
     <Content Include="Layouts\css\overview.min.css">
       <DependentUpon>overview.css</DependentUpon>
     </Content>
-    <Content Include="Layouts\js\libs\chartist-plugin-axistitle.min.js" />
-    <Content Include="Layouts\js\libs\chartist-plugin-threshold.min.js" />
-    <Content Include="Layouts\js\libs\chartist.min.js" />
+    <Content Include="Layouts\js\libs\chart.min.js" />
     <Content Include="Layouts\css\overview.less" />
     <Content Include="Layouts\css\_cd.less" />
     <Content Include="Layouts\css\navigation.less" />
     <Content Include="Layouts\css\common.less" />
     <None Include="packages.config" />
-    <Content Include="Layouts\js\libs\jquery-3.3.1.min.js" />
+    <Content Include="Layouts\js\libs\moment.min.js" />
     <Content Include="Pages\Master.Master" />
     <None Include="Properties\PublishProfiles\HydroLogger-Leon - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
@@ -181,7 +178,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Layouts\css\libs\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

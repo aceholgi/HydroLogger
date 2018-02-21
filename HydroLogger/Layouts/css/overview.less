@@ -1,50 +1,20 @@
 ﻿@import "_cd.less";
 
-body { 
-    .dual-chart-container {
-        .chart-container {
-            width: 50%;
-            float: left;
+body {
+    .chart-container {
+        position: relative;
+        margin: auto;
+        width: 80vw;
+        margin-bottom: 20px;
 
-            .chart-name {
-                padding-left: 64px;
-                font-size: 0.8vw;
-                color: @materialSecondary;
-                float: left;
-                position: absolute;
-            }
+        canvas {
+            border: 1px dotted red;
+        }
 
-            .temperature-chart {
-                .ct-series-a .ct-point {
-                    stroke: @tempPoint !important;
-                }
+        .chart-temperature {
+        }
 
-                .ct-series-a .ct-line {
-                    stroke: @tempLine !important;
-                }
-            }
-
-            .humidity-chart {
-                .ct-series-a .ct-point {
-                    stroke: @humidPoint !important;
-                }
-
-                .ct-series-a .ct-line {
-                    stroke: @humudLine !important;
-                }
-            }
-
-            .ct-chart {
-
-
-                .ct-grid {
-                    stroke: rgba(0, 0, 0, 0.4) !important;
-                }
-
-                .ct-label {
-                    color: rgba(0, 0, 0, 0.8) !important;
-                }
-            }
+        .chart-humidity {
         }
     }
 }
