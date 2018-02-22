@@ -36,7 +36,6 @@
 
             temperatureCanvas = document.createElement('canvas');
             temperatureCanvas.id = 'chart-temperature' + name;
-            temperatureCanvas.classList = 'chart-temperature';
             temperatureCanvas.height = canvasHeight;
             
             temperatureContainer.appendChild(temperatureCanvas);
@@ -48,7 +47,6 @@
 
             humidityCanvas = document.createElement('canvas');
             humidityCanvas.id = 'chart-humidity' + name;
-            humidityCanvas.classList = 'chart-humidity';
             humidityCanvas.height = canvasHeight;
             
             humidityContainer.appendChild(humidityCanvas);           
@@ -63,18 +61,26 @@
                     maintainAspectRatio: false,
                     xAxes: [{
                         type: 'time',
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Uhrzeit'
+                        distribution: 'linear',
+                        time: {
+                            unit: 'hour',
+                            unitStepSize: 1,
+                            //http://momentjs.com/docs/#/displaying/format/
+                            displayFormats: {
+                                'hour': 'HH:mm', // Sept 4, 5PM
+                                'day': 'MMM Do', // Sep 4 2015
+                                'week': 'll', // Week 46, or maybe "[W]WW - YYYY" ?
+                                'month': 'MMM YYYY', // Sept 2015
+                                'year': 'YYYY', // 2015
+                            }
                         }
                     }],
                     yAxes: [{
                         display: true,
                         scaleLabel: {
-                            display: true,
                             labelString: 'Temperatur'
-                        }
+                        },
+
                     }]
                 }
             };
@@ -139,7 +145,7 @@ yellow
             for (let i = 0; i < values.length; i++)
             {
                 let obj = {};
-                obj['x'] = new Date(parseInt(dates[i].substring(6, dates[i].length - 2)));
+                obj['t'] = moment(parseInt(dates[i].substring(6, dates[i].length - 2))); //new Date(parseInt(dates[i].substring(6, dates[i].length - 2)));
                 obj['y'] = values[i];
 
                 ret.push(obj)

@@ -4,6 +4,3 @@
   width: 80vw;
   margin-bottom: 20px;
 }
-body .chart-container canvas {
-  border: 1px dotted red;
-}
