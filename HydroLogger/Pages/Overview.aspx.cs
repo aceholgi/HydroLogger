@@ -1,11 +1,9 @@
 ﻿using HydroLogger.Code;
 using HydroLogger.Code.DTO;
 using HydroLogger.Code.Manager;
-using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 
 namespace HydroLogger.Pages
 {
@@ -19,15 +17,15 @@ namespace HydroLogger.Pages
         {
             try
             {
-                if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo] != null)
-                    mongoManager = new MongoManager(new MongoUrl(ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo].ToString()));
+                mongoManager = new MongoManager();
 
-                List<QueryResultItem> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(), FilterBuilder.BuildFilter(DateTime.Now.AddDays(-1), DateTime.Now));
+                List<QueryResultItem> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(), FilterBuilder.BuildHumitureFilter(DateTime.Now.AddDays(-1), DateTime.Now));
 
                 JsonData = JsonConvert.SerializeObject(overviewResults);
             }
             catch (Exception ex)
             {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
             }
         }
     }

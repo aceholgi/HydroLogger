@@ -125,6 +125,7 @@
     <Content Include="Layouts\css\common.less" />
     <Content Include="Layouts\css\settings.less" />
     <None Include="packages.config" />
+    <Content Include="Layouts\js\libs\jquery.min.js" />
     <Content Include="Layouts\js\libs\moment.min.js" />
     <Content Include="Layouts\js\settings.js" />
     <Content Include="Pages\Master.Master" />
@@ -150,11 +151,12 @@
   <ItemGroup>
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\DTO\BisonCollectionItem.cs" />
-    <Compile Include="Code\DTO\IdPositionItem.cs" />
+    <Compile Include="Code\DTO\UploaderConfigItem.cs" />
     <Compile Include="Code\DTO\QueryResultItem.cs" />
     <Compile Include="Code\DTO\HumitureItem.cs" />
     <Compile Include="Code\FilterBuilder.cs" />
     <Compile Include="Code\Manager\AuthentificationManager.cs" />
+    <Compile Include="Code\Manager\LoggingManager.cs" />
     <Compile Include="Code\Manager\MailManager.cs" />
     <Compile Include="Code\Manager\MongoManager.cs" />
     <Compile Include="Pages\Master.Master.cs">

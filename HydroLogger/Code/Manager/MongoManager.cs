@@ -4,96 +4,191 @@ using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Threading;
 using System.Web;
 
 namespace HydroLogger.Code.Manager
 {
     public class MongoManager
     {
-        private MongoUrl _url;
         private MongoClient _client;
         private IMongoDatabase _database = null;
 
-        public MongoManager(MongoUrl url)
-        {
-            if (!string.IsNullOrEmpty(url.ToString()))
-            {
-                _url = url;
-                _client = new MongoClient(_url);
-                _database = _client.GetDatabase(_url.DatabaseName);
-            }
-        }
-
-        public void Insert(HumitureItem item, string position)
+        public MongoManager()
         {
             try
             {
-                if (_database == null || !item.IsValid())
+                if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo] == null)
                     return;
 
-                position = HttpUtility.HtmlEncode(position);
+                MongoUrl url = new MongoUrl(ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo].ConnectionString + "");
 
-                var collection = _database.GetCollection<BsonDocument>(Constants.Database.CollectionNamePrefix + position);
-
-                if (collection == null)
+                if (!string.IsNullOrEmpty(url.ToString()))
                 {
-                    _database.CreateCollection(Constants.Database.CollectionNamePrefix + Constants.Database.Fields.Position);
-                    collection = _database.GetCollection<BsonDocument>(Constants.Database.CollectionNamePrefix + position);
+                    _client = new MongoClient(url);
+                    _database = _client.GetDatabase(url.DatabaseName);
                 }
-
-                collection.InsertOne(item.ToBson());
             }
             catch (Exception ex)
             {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
+        }
 
+        public void Insert(BsonDocument document, string collectionName)
+        {
+            try
+            {
+                if (_database == null || string.IsNullOrEmpty(collectionName))
+                    return;
+
+                collectionName = HttpUtility.HtmlEncode(collectionName);
+
+                var collection = _database.GetCollection<BsonDocument>(Constants.Database.CollectionNamePrefix + collectionName);
+
+                if (collection == null)
+                    return;
+
+                collection.InsertOne(document);
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
             }
         }
 
         public List<string> GetAllCollections()
         {
-            if (_database == null)
-                return new List<string>();
-
-            List<string> collectionNames = new List<string>();
-
-            foreach (var item in _database.ListCollectionsAsync().Result.ToListAsync<BsonDocument>().Result)
+            try
             {
-                if (item.ToString().Contains(Constants.Database.CollectionNamePrefix))
+                if (_database == null)
+                    return new List<string>();
+
+                List<string> collectionNames = new List<string>();
+
+                foreach (var item in _database.ListCollectionsAsync().Result.ToListAsync<BsonDocument>().Result)
                 {
-                    BisonCollectionItem collectionData = JsonConvert.DeserializeObject<BisonCollectionItem>(item.ToString());
+                    if (item.ToString().Contains(Constants.Database.CollectionNamePrefix))
+                    {
+                        BisonCollectionItem collectionData = JsonConvert.DeserializeObject<BisonCollectionItem>(item.ToString());
 
-                    if (!string.IsNullOrEmpty(collectionData.Name))
-                        collectionNames.Add(collectionData.Name);
+                        if (!string.IsNullOrEmpty(collectionData.Name))
+                            collectionNames.Add(collectionData.Name);
+                    }
                 }
-            }
 
-            return collectionNames;
+                return collectionNames;
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return new List<string>();
         }
 
+        #region Humiture Items
         public QueryResultItem SelectFromCollection(string collectionName, FilterDefinition<HumitureItem> filter)
         {
-            if (_database == null)
-                return new QueryResultItem();
+            try
+            {
+                QueryResultItem item = new QueryResultItem();
 
-            var collection = _database.GetCollection<HumitureItem>(collectionName);
+                if (_database == null)
+                    return item;
 
-            if (collection == null)
-                return new QueryResultItem();
+                var collection = _database.GetCollection<HumitureItem>(collectionName);
 
-            return new QueryResultItem(HttpUtility.HtmlDecode(collectionName).Substring(Constants.Database.CollectionNamePrefix.Length), collection.Find(filter).ToList());
+                if (collection == null)
+                    return item;
+
+                item.HumitureItems = collection.Find(filter).ToList();
+                item.Name = HttpUtility.HtmlDecode(collectionName).Substring(Constants.Database.CollectionNamePrefix.Length);
+
+                return item;
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return new QueryResultItem();
         }
 
         public List<QueryResultItem> SelectFromCollections(List<string> collectionNames, FilterDefinition<HumitureItem> filter)
         {
-            if (_database == null || collectionNames == null)
-                return new List<QueryResultItem>();
+            try
+            {
+                if (_database == null || collectionNames == null)
+                    return new List<QueryResultItem>();
 
-            List<QueryResultItem> results = new List<QueryResultItem>();
+                List<QueryResultItem> results = new List<QueryResultItem>();
 
-            foreach (string s in collectionNames)
-                results.Add(SelectFromCollection(s, filter));
+                foreach (string s in collectionNames)
+                    results.Add(SelectFromCollection(s, filter));
 
-            return results;
+                return results;
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return new List<QueryResultItem>();
         }
+        #endregion
+
+        #region Uploader Config Items
+        public List<UploaderConfigItem> SelectFromCollection(string collectionName, FilterDefinition<UploaderConfigItem> filter)
+        {
+            try
+            {
+                List<UploaderConfigItem> items = new List<UploaderConfigItem>();
+
+                if (_database == null)
+                    return items;
+
+                var collection = _database.GetCollection<UploaderConfigItem>(Constants.Database.CollectionNamePrefix + collectionName);
+
+                if (collection == null)
+                    return items;
+
+                return collection.Find(filter).ToList();
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return new List<UploaderConfigItem>();
+        }
+
+        public void Delete(string collectionName, FilterDefinition<UploaderConfigItem> filter)
+        {
+            try
+            {
+                if (_database == null || string.IsNullOrEmpty(collectionName))
+                    return;
+
+                collectionName = HttpUtility.HtmlEncode(collectionName);
+
+                var collection = _database.GetCollection<BsonDocument>(Constants.Database.CollectionNamePrefix + collectionName);
+
+                if (collection == null)
+                    return;
+
+
+                var filterBuilder = Builders<BsonDocument>.Filter;
+
+                var f = filterBuilder.Eq(Constants.Database.Fields.UploaderConfig.Position,1 );
+
+
+                collection.DeleteOne(f);
+
+                //                collection.DeleteOne(filter, new System.Threading.CancellationToken(false), null);
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
+        }
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace HydroLogger.Code.Manager
 {
@@ -6,9 +7,16 @@ namespace HydroLogger.Code.Manager
     {
         public static bool Authenticate(string apiSecretParam)
         {
-            if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.ApiSecret] != null)
-                if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.ApiSecret].ToString() + "" == apiSecretParam)
-                    return true;
+            try
+            {
+                if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.ApiSecret] != null)
+                    if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.ApiSecret].ToString() + "" == apiSecretParam)
+                        return true;
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
             return false;
         }
     }

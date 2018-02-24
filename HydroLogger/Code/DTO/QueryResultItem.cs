@@ -10,11 +10,5 @@ namespace HydroLogger.Code.DTO
         public QueryResultItem()
         {
         }
-
-        public QueryResultItem(string name, List<HumitureItem> items)
-        {
-            HumitureItems = items;
-            Name = name;
-        }
     }
 }
