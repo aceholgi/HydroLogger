@@ -15,51 +15,51 @@ namespace HydroLogger.Pages
         [WebMethod]
         public static void SaveUploaderConfig(string data)
         {
-            //try
-            //{
-            //    MongoManager mongoManager;
-            //    mongoManager = new MongoManager();
+           try
+           {
+               MongoManager mongoManager;
+               mongoManager = new MongoManager();
 
-            //    List<UploaderConfigItem> itemsNew = new List<UploaderConfigItem>();
-            //    List<UploaderConfigItem> itemsExisting = new List<UploaderConfigItem>();
+               List<UploaderConfigItem> itemsNew = new List<UploaderConfigItem>();
+               List<UploaderConfigItem> itemsExisting = new List<UploaderConfigItem>();
 
-            //    itemsNew = JsonConvert.DeserializeObject<List<UploaderConfigItem>>(data);
-            //    itemsExisting = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.BuildFilter());
+               itemsNew = JsonConvert.DeserializeObject<List<UploaderConfigItem>>(data);
+               itemsExisting = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.BuildUploaderConfigFilter());
 
-            //    foreach (UploaderConfigItem item in itemsNew)
-            //    {
-            //        if (itemsExisting.Any(x => x.UploaderId == item.UploaderId))
-            //        {
-            //            if (itemsExisting.Any(x => x.UploaderId == item.UploaderId && x.Position != item.Position))
-            //            {
-            //                List<BsonElement> elements = new List<BsonElement>
-            //                {
-            //                new BsonElement(Constants.Database.Fields.UploaderConfig.Id, BsonValue.Create(item.UploaderId)),
-            //                new BsonElement(Constants.Database.Fields.UploaderConfig.Position, BsonValue.Create(item.Position))
-            //                };
+               foreach (UploaderConfigItem item in itemsNew)
+               {
+                   if (itemsExisting.Any(x => x.UploaderId == item.UploaderId))
+                   {
+                   //    if (itemsExisting.Any(x => x.UploaderId == item.UploaderId && x.Position != item.Position))
+                   //    {
+                   //        List<BsonElement> elements = new List<BsonElement>
+                   //        {
+                   //        new BsonElement(Constants.Database.Fields.UploaderConfig.Id, BsonValue.Create(item.UploaderId)),
+                   //        new BsonElement(Constants.Database.Fields.UploaderConfig.Position, BsonValue.Create(item.Position))
+                   //        };
+                   //
+                   //        BsonDocument document = new BsonDocument(elements);
+                   //        mongoManager.Delete(Constants.Database.SettingsCollection, FilterBuilder.BuildFilter());
+                   //        mongoManager.Insert(document, Constants.Database.SettingsCollection);
+                   //    }
+                   }
+                   else
+                   {
+                       List<BsonElement> elements = new List<BsonElement>
+                       {
+                       new BsonElement(Constants.Database.Fields.UploaderConfig.Id, BsonValue.Create(item.UploaderId)),
+                       new BsonElement(Constants.Database.Fields.UploaderConfig.Position, BsonValue.Create(item.Position))
+                       };
 
-            //                BsonDocument document = new BsonDocument(elements);
-            //                mongoManager.Delete(Constants.Database.SettingsCollection, FilterBuilder.BuildFilter());
-            //                mongoManager.Insert(document, Constants.Database.SettingsCollection);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            List<BsonElement> elements = new List<BsonElement>
-            //            {
-            //            new BsonElement(Constants.Database.Fields.UploaderConfig.Id, BsonValue.Create(item.UploaderId)),
-            //            new BsonElement(Constants.Database.Fields.UploaderConfig.Position, BsonValue.Create(item.Position))
-            //            };
-
-            //            BsonDocument document = new BsonDocument(elements);
-            //            mongoManager.Insert(document, Constants.Database.SettingsCollection);
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
-            //}
+                       BsonDocument document = new BsonDocument(elements);
+                       mongoManager.Insert(document, Constants.Database.SettingsCollection);
+                   }
+               }
+           }
+           catch (Exception ex)
+           {
+               LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+           }
         }
 
         [WebMethod]

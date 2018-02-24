@@ -45,7 +45,7 @@ namespace HydroLogger.Code.Manager
 
                 collectionName = HttpUtility.HtmlEncode(collectionName);
 
-                var collection = _database.GetCollection<BsonDocument>(Constants.Database.CollectionNamePrefix + collectionName);
+                var collection = _database.GetCollection<BsonDocument>(collectionName);
 
                 if (collection == null)
                     return;
@@ -123,8 +123,8 @@ namespace HydroLogger.Code.Manager
 
                 List<QueryResultItem> results = new List<QueryResultItem>();
 
-                foreach (string s in collectionNames)
-                    results.Add(SelectFromCollection(s, filter));
+                foreach (string name in collectionNames)
+                    results.Add(SelectFromCollection(name, filter));
 
                 return results;
             }
@@ -146,7 +146,7 @@ namespace HydroLogger.Code.Manager
                 if (_database == null)
                     return items;
 
-                var collection = _database.GetCollection<UploaderConfigItem>(Constants.Database.CollectionNamePrefix + collectionName);
+                var collection = _database.GetCollection<UploaderConfigItem>(collectionName);
 
                 if (collection == null)
                     return items;
@@ -169,7 +169,7 @@ namespace HydroLogger.Code.Manager
 
                 collectionName = HttpUtility.HtmlEncode(collectionName);
 
-                var collection = _database.GetCollection<BsonDocument>(Constants.Database.CollectionNamePrefix + collectionName);
+                var collection = _database.GetCollection<BsonDocument>(collectionName);
 
                 if (collection == null)
                     return;
@@ -177,7 +177,7 @@ namespace HydroLogger.Code.Manager
 
                 var filterBuilder = Builders<BsonDocument>.Filter;
 
-                var f = filterBuilder.Eq(Constants.Database.Fields.UploaderConfig.Position,1 );
+                var f = filterBuilder.Eq(Constants.Database.Fields.UploaderConfig.Position, 1);
 
 
                 collection.DeleteOne(f);
