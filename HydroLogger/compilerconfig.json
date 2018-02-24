@@ -10,5 +10,9 @@
   {
     "outputFile": "Layouts/css/common.css",
     "inputFile": "Layouts/css/common.less"
+  },
+  {
+    "outputFile": "Layouts/css/settings.css",
+    "inputFile": "Layouts/css/settings.less"
   }
 ]

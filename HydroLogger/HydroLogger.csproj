@@ -108,13 +108,22 @@
     <Content Include="Layouts\css\overview.min.css">
       <DependentUpon>overview.css</DependentUpon>
     </Content>
+    <Content Include="Layouts\css\settings.css">
+      <DependentUpon>settings.less</DependentUpon>
+    </Content>
+    <Content Include="Layouts\css\settings.min.css">
+      <DependentUpon>settings.css</DependentUpon>
+    </Content>
+    <Content Include="Layouts\js\common.js" />
     <Content Include="Layouts\js\libs\chart.min.js" />
     <Content Include="Layouts\css\overview.less" />
     <Content Include="Layouts\css\_cd.less" />
     <Content Include="Layouts\css\navigation.less" />
     <Content Include="Layouts\css\common.less" />
+    <Content Include="Layouts\css\settings.less" />
     <None Include="packages.config" />
     <Content Include="Layouts\js\libs\moment.min.js" />
+    <Content Include="Layouts\js\settings.js" />
     <Content Include="Pages\Master.Master" />
     <None Include="Properties\PublishProfiles\HydroLogger-Leon - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
@@ -127,10 +136,13 @@
   <ItemGroup>
     <Content Include="Layouts\js\overview.js" />
     <Content Include="Pages\Overview.aspx" />
+    <Content Include="Pages\Services.aspx" />
     <Content Include="Pages\Settings.aspx" />
     <Content Include="Pages\Statistics.aspx" />
     <Content Include="Pages\Uploader.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Constants.cs" />
@@ -154,6 +166,13 @@
     </Compile>
     <Compile Include="Pages\Overview.aspx.designer.cs">
       <DependentUpon>Overview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Services.aspx.cs">
+      <DependentUpon>Services.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Services.aspx.designer.cs">
+      <DependentUpon>Services.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings.aspx.cs">
       <DependentUpon>Settings.aspx</DependentUpon>

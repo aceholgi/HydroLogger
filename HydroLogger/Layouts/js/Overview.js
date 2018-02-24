@@ -37,7 +37,7 @@
             temperatureCanvas = document.createElement('canvas');
             temperatureCanvas.id = 'chart-temperature' + name;
             temperatureCanvas.height = canvasHeight;
-            
+
             temperatureContainer.appendChild(temperatureCanvas);
             container.appendChild(temperatureContainer);
 
@@ -48,8 +48,8 @@
             humidityCanvas = document.createElement('canvas');
             humidityCanvas.id = 'chart-humidity' + name;
             humidityCanvas.height = canvasHeight;
-            
-            humidityContainer.appendChild(humidityCanvas);           
+
+            humidityContainer.appendChild(humidityCanvas);
             container.appendChild(humidityContainer);
 
 
@@ -82,7 +82,7 @@
                         },
 
                     }]
-                }
+                },
             };
 
             let chartTemperature = new Chart(ctxTemperature, {
@@ -93,6 +93,7 @@
                         data: HydroLogger.Overview.PrepareData(temperatures, dates),
                         backgroundColor: 'green',
                         borderColor: 'green',
+                        lineTension: 0,  
                         fill: false
                     }]
                 },
@@ -107,6 +108,7 @@
                         data: HydroLogger.Overview.PrepareData(humiditys, dates),
                         backgroundColor: 'blue',
                         borderColor: 'blue',
+                        lineTension: 0, 
                         fill: false,
                     }]
                 },

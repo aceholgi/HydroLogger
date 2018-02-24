@@ -5,13 +5,14 @@
 <head runat="server">
     <title>Temperaturübewachung</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"/>
     <link href="../Layouts/css/common.css" rel="stylesheet" />
     <link href="../Layouts/css/navigation.css" rel="stylesheet" />
-    <link href="../Layouts/css/chartist.css" rel="stylesheet" />
     <link href="../Images/favicon.png" rel="icon" />
-
     <asp:ContentPlaceHolder ID="contentCss" runat="server"></asp:ContentPlaceHolder>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" type="text/javascript" async></script>
+    <script src="../Layouts/js/common.js" type="text/javascript" defer></script>
     <asp:ContentPlaceHolder ID="contentScripts" runat="server"></asp:ContentPlaceHolder>
 </head>
 

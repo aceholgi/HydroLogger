@@ -5,9 +5,8 @@
 </asp:Content>
 
 <asp:Content ID="contentScripts" ContentPlaceHolderID="contentScripts" runat="server">
-    <script src="../Layouts/js/libs/moment.min.js"></script>
+    <script src="../Layouts/js/libs/moment.min.js" defer></script>
     <script src="../Layouts/js/libs/chart.min.js" defer></script>
-
     <script src="../Layouts/js/overview.js" defer></script>
 
     <script type="text/javascript">
