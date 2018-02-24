@@ -1,11 +1,10 @@
 ﻿using HydroLogger.Code.DTO;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Web;
-using System.Web.Script.Serialization;
 
 namespace HydroLogger.Code.Manager
 {
@@ -56,13 +55,13 @@ namespace HydroLogger.Code.Manager
                 return new List<string>();
 
             List<string> collectionNames = new List<string>();
-            JavaScriptSerializer ser = new JavaScriptSerializer();
 
             foreach (var item in _database.ListCollectionsAsync().Result.ToListAsync<BsonDocument>().Result)
             {
                 if (item.ToString().Contains(Constants.Database.CollectionNamePrefix))
                 {
-                    BisonCollectionDTO collectionData = ser.Deserialize<BisonCollectionDTO>(item.ToString());
+                    BisonCollectionItem collectionData = JsonConvert.DeserializeObject<BisonCollectionItem>(item.ToString());
+
                     if (!string.IsNullOrEmpty(collectionData.Name))
                         collectionNames.Add(collectionData.Name);
                 }
@@ -71,57 +70,30 @@ namespace HydroLogger.Code.Manager
             return collectionNames;
         }
 
-        public ResultDTO SelectFromCollection(string collectionName, FilterDefinition<HumitureItem> filter)
+        public QueryResultItem SelectFromCollection(string collectionName, FilterDefinition<HumitureItem> filter)
         {
             if (_database == null)
-                return new ResultDTO();
+                return new QueryResultItem();
 
             var collection = _database.GetCollection<HumitureItem>(collectionName);
 
             if (collection == null)
-                return new ResultDTO();
+                return new QueryResultItem();
 
-            return new ResultDTO(HttpUtility.HtmlDecode(collectionName).Substring(Constants.Database.CollectionNamePrefix.Length), collection.Find(filter).ToList());
+            return new QueryResultItem(HttpUtility.HtmlDecode(collectionName).Substring(Constants.Database.CollectionNamePrefix.Length), collection.Find(filter).ToList());
         }
 
-        public List<ResultDTO> SelectFromCollections(List<string> collectionNames, FilterDefinition<HumitureItem> filter)
+        public List<QueryResultItem> SelectFromCollections(List<string> collectionNames, FilterDefinition<HumitureItem> filter)
         {
             if (_database == null || collectionNames == null)
-                return new List<ResultDTO>();
+                return new List<QueryResultItem>();
 
-            List<ResultDTO> results = new List<ResultDTO>();
+            List<QueryResultItem> results = new List<QueryResultItem>();
 
             foreach (string s in collectionNames)
                 results.Add(SelectFromCollection(s, filter));
 
             return results;
         }
-
-        //public List<CollectionDTO> SelectFromAllCollectionWithDateOffset(DateTime dateOffset)
-        //{
-        //    List<CollectionDTO> res = new List<CollectionDTO>();
-        //
-        //    List<List<HumitureItem>> allCollectionItems = _SelectFromAllCollectionsWithDateOffset(dateOffset);
-        //
-        //    foreach (List<HumitureItem> list in allCollectionItems)
-        //    {
-        //        CollectionDTO collection = new CollectionDTO();
-        //        if (list.Count > 0)
-        //        {
-        //            collection.Name = HttpUtility.HtmlDecode(list[0].Position);
-        //
-        //            int index = 20;
-        //            foreach (HumitureItem item in list)
-        //            {
-        //                index++;
-        //                collection.Temperatures.Add(item.Temperature);
-        //                collection.Humiditys.Add(item.Humidity);
-        //                collection.Dates.Add(item.Date.ToString("o"));
-        //            }
-        //            res.Add(collection);
-        //        }
-        //    }
-        //    return res;
-        //}
     }
 }

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace HydroLogger.Code.DTO
 {
-    public class BisonCollectionDTO
+    public class BisonCollectionItem
     {
         public string Name { get; set; }
         public string Type { get; set; }

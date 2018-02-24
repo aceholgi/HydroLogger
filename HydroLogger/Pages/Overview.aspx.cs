@@ -2,11 +2,10 @@
 using HydroLogger.Code.DTO;
 using HydroLogger.Code.Manager;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Web.Script.Serialization;
-using System.Web.UI;
 
 namespace HydroLogger.Pages
 {
@@ -23,10 +22,9 @@ namespace HydroLogger.Pages
                 if (ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo] != null)
                     mongoManager = new MongoManager(new MongoUrl(ConfigurationManager.ConnectionStrings[Constants.ConnectionStrings.Mongo].ToString()));
 
-                List<ResultDTO> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(), FilterBuilder.BuildFilter(DateTime.Now.AddDays(-1), DateTime.Now));
+                List<QueryResultItem> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(), FilterBuilder.BuildFilter(DateTime.Now.AddDays(-1), DateTime.Now));
 
-                JavaScriptSerializer ser = new JavaScriptSerializer();
-                JsonData = ser.Serialize(overviewResults);
+                JsonData = JsonConvert.SerializeObject(overviewResults);
             }
             catch (Exception ex)
             {

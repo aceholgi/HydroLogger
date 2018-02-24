@@ -147,7 +147,7 @@ yellow
             for (let i = 0; i < values.length; i++)
             {
                 let obj = {};
-                obj['t'] = moment(parseInt(dates[i].substring(6, dates[i].length - 2))); //new Date(parseInt(dates[i].substring(6, dates[i].length - 2)));
+                obj['t'] = moment(dates[i]);
                 obj['y'] = values[i];
 
                 ret.push(obj)

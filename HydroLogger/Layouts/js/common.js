@@ -6,7 +6,7 @@
             $.ajax({
                 type: "POST",
                 url: "/Pages/Services.aspx/" + functionName,
-                data: data,     //'{ data: "test" }'
+                data: data,//"{data:" + JSON.stringify(data) + "}",//JSON.stringify(data),     //'{ data: "test" }'
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (response)

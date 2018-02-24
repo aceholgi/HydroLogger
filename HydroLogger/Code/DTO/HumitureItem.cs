@@ -1,13 +1,12 @@
 ﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System;
-using System.Web.Script.Serialization;
 
 namespace HydroLogger.Code.DTO
 {
     public class HumitureItem
     {
-        [ScriptIgnore]
+        [JsonIgnore]
         public BsonObjectId _id { get; set; }
 
         public DateTime Date { get; set; }
