@@ -58,7 +58,7 @@ namespace HydroLogger.Code.Manager
             }
         }
 
-        public List<string> GetAllCollections()
+        public List<string> GetAllCollections(string prefix)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace HydroLogger.Code.Manager
 
                 foreach (var item in _database.ListCollectionsAsync().Result.ToListAsync<BsonDocument>().Result)
                 {
-                    if (item.ToString().Contains(Constants.Database.CollectionNamePrefix))
+                    if (string.IsNullOrEmpty(prefix) || item.ToString().Contains(prefix))
                     {
                         BisonCollectionItem collectionData = JsonConvert.DeserializeObject<BisonCollectionItem>(item.ToString());
 
@@ -169,20 +169,12 @@ namespace HydroLogger.Code.Manager
 
                 collectionName = HttpUtility.HtmlEncode(collectionName);
 
-                var collection = _database.GetCollection<BsonDocument>(collectionName);
+                var collection = _database.GetCollection<UploaderConfigItem>(collectionName);
 
                 if (collection == null)
                     return;
 
-
-                var filterBuilder = Builders<BsonDocument>.Filter;
-
-                var f = filterBuilder.Eq(Constants.Database.Fields.UploaderConfig.Position, 1);
-
-
-                collection.DeleteOne(f);
-
-                //                collection.DeleteOne(filter, new System.Threading.CancellationToken(false), null);
+                collection.DeleteOne(filter);
             }
             catch (Exception ex)
             {

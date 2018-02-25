@@ -41,7 +41,7 @@
 
             HydroLogger.Settings.RemoveEmptyRows(table);
 
-            if (!HydroLogger.Settings.HighlightEmptyFields(table))
+            if (!HydroLogger.Settings.HighlightInvalidFileds(table))
                 return; //if fields are empty or whitewspace
 
             let rows = table.getElementsByTagName('tr');
@@ -82,20 +82,38 @@
             for (let i = 0; i < rowsToRemove.length; i++)
                 table.removeChild(rowsToRemove[i]);
         },
-        HighlightEmptyFields: function (table)
+        HighlightInvalidFileds: function (table)
         {
-            let inputs = table.getElementsByTagName('input');
+            let inputs = table.getElementsByTagName('input');    //HTML Collection to array
+            let inputValues = [];
+            
             let isValid = true;
 
             for (let i = 0; i < inputs.length; i++)
+                inputValues.push(inputs[i].value);
+
+            for (let i = 0; i < inputs.length; i++)
+            {
+                let isInputValid = true;
+                
                 if (inputs[i].value == '' || !(/\S/.test(inputs[i].value)))
+                    isInputValid = false;
+
+                if (inputValues.indexOf(inputs[i].value) != inputValues.lastIndexOf(inputs[i].value)) //identische Felder
+                    isInputValid = false;
+
+
+
+                if (isInputValid)
+                {
+                    inputs[i].classList = '';
+                }
+                else
                 {
                     inputs[i].classList = 'error';
                     isValid = false;
                 }
-                else
-                    inputs[i].classList = '';
-
+            }
             return isValid;
         },
         Load: function ()

@@ -54,7 +54,7 @@ namespace HydroLogger.Pages
                         new BsonElement(Constants.Database.Fields.Humiture.Humidity, BsonValue.Create(_humidity))
                     };
 
-                    List<UploaderConfigItem> configItems = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.BuildUploaderConfigFilter(_uploaderId));
+                    List<UploaderConfigItem> configItems =  mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter(_uploaderId));
                     if (configItems.Any())
                         mongoManager.Insert(new BsonDocument(elements), Constants.Database.CollectionNamePrefix + configItems.FirstOrDefault().Position);
                     else

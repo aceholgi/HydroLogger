@@ -19,7 +19,7 @@ namespace HydroLogger.Pages
             {
                 mongoManager = new MongoManager();
 
-                List<QueryResultItem> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(), FilterBuilder.BuildHumitureFilter(DateTime.Now.AddDays(-1), DateTime.Now));
+                List<QueryResultItem> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(Constants.Database.CollectionNamePrefix), FilterBuilder.Humiture.BuildFilter(DateTime.Now.AddDays(-1), DateTime.Now));
 
                 JsonData = JsonConvert.SerializeObject(overviewResults);
             }

@@ -15,51 +15,63 @@ namespace HydroLogger.Pages
         [WebMethod]
         public static void SaveUploaderConfig(string data)
         {
-           try
-           {
-               MongoManager mongoManager;
-               mongoManager = new MongoManager();
+            try
+            {
+                MongoManager mongoManager = new MongoManager();
 
-               List<UploaderConfigItem> itemsNew = new List<UploaderConfigItem>();
-               List<UploaderConfigItem> itemsExisting = new List<UploaderConfigItem>();
+                List<UploaderConfigItem> itemsSaved = new List<UploaderConfigItem>();
+                List<UploaderConfigItem> itemsExisting = new List<UploaderConfigItem>();
+                List<UploaderConfigItem> alreadyChecked = new List<UploaderConfigItem>();
 
-               itemsNew = JsonConvert.DeserializeObject<List<UploaderConfigItem>>(data);
-               itemsExisting = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.BuildUploaderConfigFilter());
+                itemsSaved = JsonConvert.DeserializeObject<List<UploaderConfigItem>>(data);
+                itemsExisting = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter());
 
-               foreach (UploaderConfigItem item in itemsNew)
-               {
-                   if (itemsExisting.Any(x => x.UploaderId == item.UploaderId))
-                   {
-                   //    if (itemsExisting.Any(x => x.UploaderId == item.UploaderId && x.Position != item.Position))
-                   //    {
-                   //        List<BsonElement> elements = new List<BsonElement>
-                   //        {
-                   //        new BsonElement(Constants.Database.Fields.UploaderConfig.Id, BsonValue.Create(item.UploaderId)),
-                   //        new BsonElement(Constants.Database.Fields.UploaderConfig.Position, BsonValue.Create(item.Position))
-                   //        };
-                   //
-                   //        BsonDocument document = new BsonDocument(elements);
-                   //        mongoManager.Delete(Constants.Database.SettingsCollection, FilterBuilder.BuildFilter());
-                   //        mongoManager.Insert(document, Constants.Database.SettingsCollection);
-                   //    }
-                   }
-                   else
-                   {
-                       List<BsonElement> elements = new List<BsonElement>
-                       {
-                       new BsonElement(Constants.Database.Fields.UploaderConfig.Id, BsonValue.Create(item.UploaderId)),
-                       new BsonElement(Constants.Database.Fields.UploaderConfig.Position, BsonValue.Create(item.Position))
-                       };
+                foreach (UploaderConfigItem item in itemsSaved)
+                {
+                    if (itemsExisting.Any(x => x.UploaderId == item.UploaderId))    //Item schon vorhanden
+                    {
+                        if (itemsExisting.Any(x => x.UploaderId == item.UploaderId && x.Position != item.Position))         //Positionseigenschaft hat sich geändert
+                        {
+                            List<BsonElement> elements = new List<BsonElement>
+                                {
+                                new BsonElement(Constants.Database.Fields.UploaderConfig.Id, BsonValue.Create(item.UploaderId)),
+                                new BsonElement(Constants.Database.Fields.UploaderConfig.Position, BsonValue.Create(item.Position))
+                                };
 
-                       BsonDocument document = new BsonDocument(elements);
-                       mongoManager.Insert(document, Constants.Database.SettingsCollection);
-                   }
-               }
-           }
-           catch (Exception ex)
-           {
-               LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
-           }
+                            BsonDocument document = new BsonDocument(elements);
+                            mongoManager.Delete(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter(item.UploaderId));
+                            mongoManager.Insert(document, Constants.Database.SettingsCollection);
+                        }
+                    }
+                    else    //Item noch nicht vorhanden
+                    {
+                        List<BsonElement> elements = new List<BsonElement>
+                            {
+                            new BsonElement(Constants.Database.Fields.UploaderConfig.Id, BsonValue.Create(item.UploaderId)),
+                            new BsonElement(Constants.Database.Fields.UploaderConfig.Position, BsonValue.Create(item.Position))
+                            };
+
+                        BsonDocument document = new BsonDocument(elements);
+                        mongoManager.Insert(document, Constants.Database.SettingsCollection);
+                    }
+                }
+
+                //Deleting
+                itemsExisting = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter());
+
+                if (itemsSaved.Count != itemsExisting.Count)
+                {
+                    foreach (UploaderConfigItem item in itemsExisting)
+                    {
+                        if (!itemsSaved.Any(x => x.UploaderId == item.UploaderId))
+                            mongoManager.Delete(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter(item.UploaderId));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
         }
 
         [WebMethod]
@@ -71,7 +83,7 @@ namespace HydroLogger.Pages
                 List<UploaderConfigItem> items = new List<UploaderConfigItem>();
 
                 mongoManager = new MongoManager();
-                items = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.BuildUploaderConfigFilter());
+                items = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter());
 
                 return JsonConvert.SerializeObject(items);
             }
@@ -83,6 +95,3 @@ namespace HydroLogger.Pages
         }
     }
 }
-
-//https://mongodb.github.io/mongo-csharp-driver/2.5/getting_started/quick_tour/
-//var filter = Builders<BsonDocument>.Filter.Eq("i", 110);
