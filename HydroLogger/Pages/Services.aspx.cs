@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Services;
 
 namespace HydroLogger.Pages
@@ -96,6 +97,9 @@ namespace HydroLogger.Pages
         {
             try
             {
+                //if (!AuthentificationManager.AuthenticateUser(HttpUtility.HtmlEncode(key + "")))
+                //    return "{\"error\":\"Unauthenticated\"}";
+
                 MongoManager mongoManager;
                 List<UploaderConfigItem> items = new List<UploaderConfigItem>();
 

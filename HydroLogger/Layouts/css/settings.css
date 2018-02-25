@@ -1,3 +1,14 @@
-﻿.idpos-table {
+﻿.settings {
+  width: 100%;
+}
+.settings .slot-key {
+  margin-bottom: 30px;
+}
+.settings .slot-id-position table {
+  border: 2px solid grey;
   border-collapse: collapse;
+  text-align: center;
+}
+.settings .slot-id-position table input {
+  border: none;
 }

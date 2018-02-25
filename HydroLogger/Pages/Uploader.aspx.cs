@@ -40,7 +40,7 @@ namespace HydroLogger.Pages
                 if (string.IsNullOrEmpty(_action) || string.IsNullOrEmpty(_uploaderId) || string.IsNullOrEmpty(_apisecret) || _temperature == -1 || _humidity == -1)
                     return;
 
-                if (!AuthentificationManager.Authenticate(_apisecret))
+                if (!AuthentificationManager.AuthenticateApi(_apisecret))
                     return;
 
                 mongoManager = new MongoManager();

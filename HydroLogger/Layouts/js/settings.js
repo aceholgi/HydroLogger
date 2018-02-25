@@ -119,6 +119,7 @@
         Load: function ()
         {
             HydroLogger.Common.Post('LoadUploaderConfig', null, function (result) { HydroLogger.Settings.Fill(JSON.parse(result)); });
+            //encodeURI("{key:" + document.getElementById('input-key') + "}")
         },
         Fill: function (configData)
         {
@@ -127,6 +128,6 @@
                 HydroLogger.Settings.AddRow(data['UploaderId'], data['Position']);
             });
             HydroLogger.Settings.AddRow();
-        }
+        },
     }
 })(window.HydroLogger = window.HydroLogger || {})

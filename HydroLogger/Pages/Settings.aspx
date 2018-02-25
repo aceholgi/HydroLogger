@@ -14,17 +14,25 @@
     </script>
 </asp:Content>
 <asp:Content ID="contentBody" ContentPlaceHolderID="contentBody" runat="server">
+    <div class="settings">
+<%--        <div class="slot-key">
+            <span>Key: </span>
+            <input type="text" id="input-key" /><input type="button" value="Authenticate" />
+        </div>--%>
 
-    <table border="1" class="idpos-table">
-        <thead>
-            <tr>
-                <th>Transmitter ID</th>
-                <th>Position</th>
-            </tr>
-        </thead>
-        <tbody id="IdPositionTableBody">
-        </tbody>
-    </table>
-    <input type="button" value="Speichern" onclick="HydroLogger.Settings.Save();" />
-    <input type="button" value="Reihe hinzufügen" onclick="HydroLogger.Settings.AddRow();" />
+        <div class="slot-id-position">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Transmitter ID</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <tbody id="IdPositionTableBody">
+                </tbody>
+            </table>
+            <input type="button" value="+" class="button button-add" onclick="HydroLogger.Settings.AddRow();" />
+            <input type="button" value="Speichern" class="button button-save" onclick="HydroLogger.Settings.Save();" />
+        </div>
+    </div>
 </asp:Content>

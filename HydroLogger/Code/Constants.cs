@@ -7,6 +7,7 @@
             public static readonly string ApiSecret = "apiSecret";
             public static readonly string Mongo = "mongoDB";
             public static readonly string Emails = "emails";
+            public static readonly string SettingsSecret = "settingsSecret";
         }
 
         public static class Database
