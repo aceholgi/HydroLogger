@@ -10,12 +10,10 @@
     <script src="../Layouts/js/overview.js" defer></script>
 
     <script type="text/javascript">
-        var jsonData = <%=JsonData%>;
-
         if (document.readyState === "complete")
-            HydroLogger.Overview.Init(jsonData);
+            HydroLogger.Overview.Init();
         else
-            window.addEventListener("DOMContentLoaded", function () { HydroLogger.Overview.Init(jsonData) }, false);
+            window.addEventListener("DOMContentLoaded", function () { HydroLogger.Overview.Init();}, false);
     </script>
 </asp:Content>
 

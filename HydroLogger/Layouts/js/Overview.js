@@ -1,28 +1,28 @@
 ﻿(function (HydroLogger)
 {
     HydroLogger.Overview = {
-        Init: function (data)
+        Init: function ()
         {
-            HydroLogger.Overview.CreateCharts(data);
+            HydroLogger.Common.Post('GetOverviewData', null, function (result) { HydroLogger.Overview.CreateCharts(JSON.parse(result)); });           
         },
-        CreateCharts: function (data)
+        CreateCharts: function (dataArray)
         {
-            for (let i = 0; i < data.length; i++)
+            Array.prototype.forEach.call(dataArray, function (data, index)
             {
                 let humiditys = [];
                 let temperatures = [];
                 let dates = [];
 
-                for (let j = 0; j < data[i]['HumitureItems'].length; j++)
+                for (let j = 0; j < data['HumitureItems'].length; j++)
                 {
-                    dates.push(data[i]['HumitureItems'][j]['Date']);
-                    temperatures.push(data[i]['HumitureItems'][j]['Temperature']);
-                    humiditys.push(data[i]['HumitureItems'][j]['Humidity']);
+                    dates.push(data['HumitureItems'][j]['Date']);
+                    temperatures.push(data['HumitureItems'][j]['Temperature']);
+                    humiditys.push(data['HumitureItems'][j]['Humidity']);
                 }
                 //dont render empty charts
                 if (humiditys.length > 0)
-                    HydroLogger.Overview.CreateChart(data[i]['Name'], dates, temperatures, humiditys);
-            }
+                    HydroLogger.Overview.CreateChart(data['Name'], dates, temperatures, humiditys);
+            });
         },
         CreateChart: function (name, dates, temperatures, humiditys)
         {
@@ -93,7 +93,7 @@
                         data: HydroLogger.Overview.PrepareData(temperatures, dates),
                         backgroundColor: 'green',
                         borderColor: 'green',
-                        lineTension: 0,  
+                        lineTension: 0,
                         fill: false
                     }]
                 },
@@ -108,50 +108,25 @@
                         data: HydroLogger.Overview.PrepareData(humiditys, dates),
                         backgroundColor: 'blue',
                         borderColor: 'blue',
-                        lineTension: 0, 
+                        lineTension: 0,
                         fill: false,
                     }]
                 },
                 options: options
             });
-
-            /*
-blue
-:
-"rgb(54, 162, 235)"
-green
-:
-"rgb(75, 192, 192)"
-grey
-:
-"rgb(201, 203, 207)"
-orange
-:
-"rgb(255, 159, 64)"
-purple
-:
-"rgb(153, 102, 255)"
-red
-:
-"rgb(255, 99, 132)"
-yellow
-:
-"rgb(255, 205, 86)"
-            */
-
         },
         PrepareData: function (values, dates)
         {
             let ret = [];
 
-            for (let i = 0; i < values.length; i++)
+            Array.prototype.forEach.call(values, function (data, index)
             {
                 let obj = {};
-                obj['t'] = moment(dates[i]);
-                obj['y'] = values[i];
+                obj['t'] = moment(dates[index]);
+                obj['y'] = values[index];
 
                 ret.push(obj)
-            }
+            });
 
             return ret;
         }

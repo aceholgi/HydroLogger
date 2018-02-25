@@ -11,11 +11,11 @@
                 data: data,//"{data:" + JSON.stringify(data) + "}",//JSON.stringify(data),     //'{ data: "test" }'
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
-                async: false,
+                async: true,
                 success: function (response)
                 {
                     if (callback)
-                        callback();
+                        callback(response.d);
                     result = response.d;
                 }
             });

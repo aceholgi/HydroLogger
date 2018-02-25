@@ -12,6 +12,7 @@
     <asp:ContentPlaceHolder ID="contentCss" runat="server"></asp:ContentPlaceHolder>
     <script src="../Layouts/js/libs/jquery.min.js" type="text/javascript" defer></script>
     <script src="../Layouts/js/common.js" type="text/javascript" defer></script>
+    <script src="../Layouts/js/navigation.js" type="text/javascript" defer></script>
     <asp:ContentPlaceHolder ID="contentScripts" runat="server"></asp:ContentPlaceHolder>
 </head>
 

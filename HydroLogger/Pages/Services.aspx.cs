@@ -13,6 +13,23 @@ namespace HydroLogger.Pages
     public partial class Services : System.Web.UI.Page
     {
         [WebMethod]
+        public static string GetOverviewData()
+        {
+            try
+            {
+                MongoManager mongoManager = new MongoManager();
+
+                List<QueryResultItem> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(Constants.Database.CollectionNamePrefix), FilterBuilder.Humiture.BuildFilter(DateTime.Now.AddDays(-1), DateTime.Now));
+                return JsonConvert.SerializeObject(overviewResults);
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return "";
+        }
+
+        [WebMethod]
         public static void SaveUploaderConfig(string data)
         {
             try

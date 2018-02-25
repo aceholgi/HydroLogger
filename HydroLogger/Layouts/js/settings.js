@@ -4,8 +4,7 @@
 
         Init: function (data)
         {
-            HydroLogger.Settings.Load();
-            HydroLogger.Settings.AddRow();
+            HydroLogger.Settings.Load();            
         },
         GetTable: function ()
         {
@@ -48,16 +47,16 @@
             let firstRowInputs = rows[0].getElementsByTagName('input');
             let data = [];
 
-            for (let i = 0; i < rows.length; i++)
+            Array.prototype.forEach.call(rows, function (row, index)
             {
                 let idPositionData = {};
 
-                let inputs = rows[i].getElementsByTagName('input');
+                let inputs = row.getElementsByTagName('input');
                 idPositionData['UploaderId'] = inputs[0].value;
                 idPositionData['Position'] = inputs[1].value;
 
                 data.push(idPositionData);
-            }
+            });
 
             HydroLogger.Common.Post('SaveUploaderConfig', "{data:'" + JSON.stringify(data) + "'}", new function () { alert('Erfolgreich gespeichert!') })
         },
@@ -67,66 +66,67 @@
 
             let rowsToRemove = [];
 
-            for (let i = 0; i < rows.length; i++)
+            Array.prototype.forEach.call(rows, function (row, index)
             {
-                let inputs = rows[i].getElementsByTagName('input');
+                let inputs = row.getElementsByTagName('input');
                 let remainingRows = table.getElementsByTagName('tr');
 
                 if (inputs[0].value == '' && inputs[1].value == '')
-                    rowsToRemove.push(rows[i])
-            }
+                    rowsToRemove.push(row)
+            });
 
             if (rows.length == rowsToRemove.length)
                 rowsToRemove.pop();
 
-            for (let i = 0; i < rowsToRemove.length; i++)
-                table.removeChild(rowsToRemove[i]);
+            Array.prototype.forEach.call(rowsToRemove, function (row, index)
+            {
+                table.removeChild(row);
+            });
         },
         HighlightInvalidFileds: function (table)
         {
             let inputs = table.getElementsByTagName('input');    //HTML Collection to array
             let inputValues = [];
-            
+
             let isValid = true;
 
             for (let i = 0; i < inputs.length; i++)
                 inputValues.push(inputs[i].value);
 
-            for (let i = 0; i < inputs.length; i++)
+            Array.prototype.forEach.call(inputs, function (input, index)
             {
                 let isInputValid = true;
-                
-                if (inputs[i].value == '' || !(/\S/.test(inputs[i].value)))
+
+                if (input.value == '' || !(/\S/.test(input.value)))
                     isInputValid = false;
 
-                if (inputValues.indexOf(inputs[i].value) != inputValues.lastIndexOf(inputs[i].value)) //identische Felder
+                if (inputValues.indexOf(input.value) != inputValues.lastIndexOf(input.value)) //identische Felder
                     isInputValid = false;
-
-
 
                 if (isInputValid)
                 {
-                    inputs[i].classList = '';
+                    input.classList = '';
                 }
                 else
                 {
-                    inputs[i].classList = 'error';
+                    input.classList = 'error';
                     isValid = false;
                 }
-            }
+            });
+
             return isValid;
         },
         Load: function ()
         {
-            let json = HydroLogger.Common.Post('LoadUploaderConfig');
-
-            let configData = JSON.parse(json);
-            HydroLogger.Settings.Fill(configData);
+            HydroLogger.Common.Post('LoadUploaderConfig', null, function (result) { HydroLogger.Settings.Fill(JSON.parse(result)); });
         },
         Fill: function (configData)
         {
-            for (let i = 0; i < configData.length; i++)
-                HydroLogger.Settings.AddRow(configData[i]['UploaderId'], configData[i]['Position']);
+            Array.prototype.forEach.call(configData, function (data, index)
+            {
+                HydroLogger.Settings.AddRow(data['UploaderId'], data['Position']);
+            });
+            HydroLogger.Settings.AddRow();
         }
     }
 })(window.HydroLogger = window.HydroLogger || {})
