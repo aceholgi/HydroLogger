@@ -14,5 +14,9 @@
   {
     "outputFile": "Layouts/css/settings.css",
     "inputFile": "Layouts/css/settings.less"
+  },
+  {
+    "outputFile": "Layouts/css/statistics.css",
+    "inputFile": "Layouts/css/statistics.less"
   }
 ]

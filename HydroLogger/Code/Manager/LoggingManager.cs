@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using HydroLogger.Code.DTO;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 
@@ -30,7 +31,7 @@ namespace HydroLogger.Code.Manager
                     new BsonElement(Constants.Database.Fields.Logging.Exception, BsonValue.Create(ex.ToString() + ""))
                 };
 
-                mongoManager.Insert(new BsonDocument(elements), Constants.Database.LoggingCollection);
+                mongoManager.Insert(new BsonDocument(elements), new CollectionItem(Constants.Database.Logging));
             }
             catch (Exception wellYouReFucked)
             {

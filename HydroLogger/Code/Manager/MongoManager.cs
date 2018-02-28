@@ -5,8 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Threading;
-using System.Web;
+using static HydroLogger.Code.Constants.Database;
 
 namespace HydroLogger.Code.Manager
 {
@@ -36,16 +35,14 @@ namespace HydroLogger.Code.Manager
             }
         }
 
-        public void Insert(BsonDocument document, string collectionName)
+        public void Insert(BsonDocument document, CollectionItem collectionItem)
         {
             try
             {
-                if (_database == null || string.IsNullOrEmpty(collectionName))
+                if (_database == null)
                     return;
 
-                collectionName = HttpUtility.HtmlEncode(collectionName);
-
-                var collection = _database.GetCollection<BsonDocument>(collectionName);
+                var collection = _database.GetCollection<BsonDocument>(collectionItem.FullEncodedName);
 
                 if (collection == null)
                     return;
@@ -58,37 +55,35 @@ namespace HydroLogger.Code.Manager
             }
         }
 
-        public List<string> GetAllCollections(string prefix)
+        public List<CollectionItem> GetAllCollectionsOfType(CollectionType type)
         {
             try
             {
                 if (_database == null)
-                    return new List<string>();
+                    return new List<CollectionItem>();
 
-                List<string> collectionNames = new List<string>();
+                List<CollectionItem> collections = new List<CollectionItem>();
 
-                foreach (var item in _database.ListCollectionsAsync().Result.ToListAsync<BsonDocument>().Result)
+                foreach (var item in _database.ListCollectionsAsync().Result.ToListAsync().Result)
                 {
-                    if (string.IsNullOrEmpty(prefix) || item.ToString().Contains(prefix))
-                    {
-                        BisonCollectionItem collectionData = JsonConvert.DeserializeObject<BisonCollectionItem>(item.ToString());
 
-                        if (!string.IsNullOrEmpty(collectionData.Name))
-                            collectionNames.Add(collectionData.Name);
-                    }
+                    CollectionItem collItem = new CollectionItem(JsonConvert.DeserializeObject<BisonCollectionItem>(item.ToString()).Name);
+
+                    if (type == CollectionType.All || collItem.Type == type)
+                        collections.Add(collItem);
                 }
 
-                return collectionNames;
+                return collections;
             }
             catch (Exception ex)
             {
                 LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
             }
-            return new List<string>();
+            return new List<CollectionItem>();
         }
 
         #region Humiture Items
-        public QueryResultItem SelectFromCollection(string collectionName, FilterDefinition<HumitureItem> filter)
+        public QueryResultItem SelectFromCollection(CollectionItem collectionItem, FilterDefinition<HumitureItem> filter)
         {
             try
             {
@@ -97,13 +92,13 @@ namespace HydroLogger.Code.Manager
                 if (_database == null)
                     return item;
 
-                var collection = _database.GetCollection<HumitureItem>(collectionName);
+                var collection = _database.GetCollection<HumitureItem>(collectionItem.FullEncodedName);
 
                 if (collection == null)
                     return item;
 
                 item.HumitureItems = collection.Find(filter).ToList();
-                item.Name = HttpUtility.HtmlDecode(collectionName).Substring(Constants.Database.CollectionNamePrefix.Length);
+                item.Name = collectionItem.Name;
 
                 return item;
             }
@@ -114,17 +109,17 @@ namespace HydroLogger.Code.Manager
             return new QueryResultItem();
         }
 
-        public List<QueryResultItem> SelectFromCollections(List<string> collectionNames, FilterDefinition<HumitureItem> filter)
+        public List<QueryResultItem> SelectFromCollections(List<CollectionItem> collectionItems, FilterDefinition<HumitureItem> filter)
         {
             try
             {
-                if (_database == null || collectionNames == null)
+                if (_database == null)
                     return new List<QueryResultItem>();
 
                 List<QueryResultItem> results = new List<QueryResultItem>();
 
-                foreach (string name in collectionNames)
-                    results.Add(SelectFromCollection(name, filter));
+                foreach (CollectionItem collectionItem in collectionItems)
+                    results.Add(SelectFromCollection(collectionItem, filter));
 
                 return results;
             }
@@ -137,7 +132,7 @@ namespace HydroLogger.Code.Manager
         #endregion
 
         #region Uploader Config Items
-        public List<UploaderConfigItem> SelectFromCollection(string collectionName, FilterDefinition<UploaderConfigItem> filter)
+        public List<UploaderConfigItem> SelectFromCollection(CollectionItem collectionItem, FilterDefinition<UploaderConfigItem> filter)
         {
             try
             {
@@ -146,7 +141,7 @@ namespace HydroLogger.Code.Manager
                 if (_database == null)
                     return items;
 
-                var collection = _database.GetCollection<UploaderConfigItem>(collectionName);
+                var collection = _database.GetCollection<UploaderConfigItem>(collectionItem.FullEncodedName);
 
                 if (collection == null)
                     return items;
@@ -160,16 +155,14 @@ namespace HydroLogger.Code.Manager
             return new List<UploaderConfigItem>();
         }
 
-        public void Delete(string collectionName, FilterDefinition<UploaderConfigItem> filter)
+        public void Delete(CollectionItem collectionItem, FilterDefinition<UploaderConfigItem> filter)
         {
             try
             {
-                if (_database == null || string.IsNullOrEmpty(collectionName))
+                if (_database == null)
                     return;
 
-                collectionName = HttpUtility.HtmlEncode(collectionName);
-
-                var collection = _database.GetCollection<UploaderConfigItem>(collectionName);
+                var collection = _database.GetCollection<UploaderConfigItem>(collectionItem.FullEncodedName);
 
                 if (collection == null)
                     return;

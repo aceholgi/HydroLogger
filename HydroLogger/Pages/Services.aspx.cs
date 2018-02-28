@@ -6,22 +6,37 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Services;
+using static HydroLogger.Code.Constants.Database;
 
 namespace HydroLogger.Pages
 {
     public partial class Services : System.Web.UI.Page
     {
         [WebMethod]
-        public static string GetOverviewData()
+        public static string GetChartData(string data)
         {
             try
             {
-                MongoManager mongoManager = new MongoManager();
+                PositionDateRangeItem pdItem = new PositionDateRangeItem();
+                pdItem = JsonConvert.DeserializeObject<PositionDateRangeItem>(data);
+                List<QueryResultItem> chartData = new List<QueryResultItem>();
 
-                List<QueryResultItem> overviewResults = mongoManager.SelectFromCollections(mongoManager.GetAllCollections(Constants.Database.CollectionNamePrefix), FilterBuilder.Humiture.BuildFilter(DateTime.Now.AddDays(-1), DateTime.Now));
-                return JsonConvert.SerializeObject(overviewResults);
+                MongoManager mongoManager = new MongoManager();
+                List<CollectionItem> positions = new List<CollectionItem>();
+
+                if (string.IsNullOrEmpty(pdItem.Positions))
+                    positions = mongoManager.GetAllCollectionsOfType(Constants.Database.CollectionType.Humiture);
+                else
+                {
+                    string[] pos = pdItem.Positions.Split(',');
+
+                    foreach (string s in pos)
+                        positions.Add(new CollectionItem(s, CollectionType.Humiture));
+                }
+
+                chartData = mongoManager.SelectFromCollections(positions, FilterBuilder.Humiture.BuildFilter(pdItem.FromDate, pdItem.ToDate));
+                return JsonConvert.SerializeObject(chartData);
             }
             catch (Exception ex)
             {
@@ -42,7 +57,7 @@ namespace HydroLogger.Pages
                 List<UploaderConfigItem> alreadyChecked = new List<UploaderConfigItem>();
 
                 itemsSaved = JsonConvert.DeserializeObject<List<UploaderConfigItem>>(data);
-                itemsExisting = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter());
+                itemsExisting = mongoManager.SelectFromCollection(new CollectionItem(Constants.Database.Settings), FilterBuilder.UploaderConfig.BuildFilter());
 
                 foreach (UploaderConfigItem item in itemsSaved)
                 {
@@ -57,8 +72,8 @@ namespace HydroLogger.Pages
                                 };
 
                             BsonDocument document = new BsonDocument(elements);
-                            mongoManager.Delete(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter(item.UploaderId));
-                            mongoManager.Insert(document, Constants.Database.SettingsCollection);
+                            mongoManager.Delete(new CollectionItem(Constants.Database.Settings), FilterBuilder.UploaderConfig.BuildFilter(item.UploaderId));
+                            mongoManager.Insert(document, new CollectionItem(Constants.Database.Settings));
                         }
                     }
                     else    //Item noch nicht vorhanden
@@ -70,19 +85,19 @@ namespace HydroLogger.Pages
                             };
 
                         BsonDocument document = new BsonDocument(elements);
-                        mongoManager.Insert(document, Constants.Database.SettingsCollection);
+                        mongoManager.Insert(document, new CollectionItem(Constants.Database.Settings));
                     }
                 }
 
                 //Deleting
-                itemsExisting = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter());
+                itemsExisting = mongoManager.SelectFromCollection(new CollectionItem(Constants.Database.Settings), FilterBuilder.UploaderConfig.BuildFilter());
 
                 if (itemsSaved.Count != itemsExisting.Count)
                 {
                     foreach (UploaderConfigItem item in itemsExisting)
                     {
                         if (!itemsSaved.Any(x => x.UploaderId == item.UploaderId))
-                            mongoManager.Delete(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter(item.UploaderId));
+                            mongoManager.Delete(new CollectionItem(Constants.Database.Settings), FilterBuilder.UploaderConfig.BuildFilter(item.UploaderId));
                     }
                 }
             }
@@ -104,9 +119,32 @@ namespace HydroLogger.Pages
                 List<UploaderConfigItem> items = new List<UploaderConfigItem>();
 
                 mongoManager = new MongoManager();
-                items = mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter());
+                items = mongoManager.SelectFromCollection(new CollectionItem(Constants.Database.Settings), FilterBuilder.UploaderConfig.BuildFilter());
 
                 return JsonConvert.SerializeObject(items);
+            }
+            catch (Exception ex)
+            {
+                LoggingManager.LogError(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return "";
+        }
+
+        [WebMethod]
+        public static string GetAllPositions()
+        {
+            try
+            {
+                List<string> collectionNames = new List<string>();
+                List<CollectionItem> collectionItems = new List<CollectionItem>();
+
+                MongoManager mongoManager = new MongoManager();
+                collectionItems = mongoManager.GetAllCollectionsOfType(Constants.Database.CollectionType.Humiture);
+
+                foreach (CollectionItem item in collectionItems)
+                    collectionNames.Add(item.Name);
+
+                return JsonConvert.SerializeObject(collectionNames);
             }
             catch (Exception ex)
             {

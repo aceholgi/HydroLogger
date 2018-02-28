@@ -1,4 +1,10 @@
-﻿body .chart-container {
+﻿.chart-container {
+  position: relative;
+  margin: auto;
+  width: 80vw;
+  margin-bottom: 20px;
+}
+.chart-container {
   position: relative;
   margin: auto;
   width: 80vw;

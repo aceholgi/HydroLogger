@@ -99,6 +99,7 @@
     <Content Include="Layouts\css\common.min.css">
       <DependentUpon>common.css</DependentUpon>
     </Content>
+    <Content Include="Layouts\css\libs\daterangepicker.min.css" />
     <Content Include="Layouts\css\navigation.css">
       <DependentUpon>navigation.less</DependentUpon>
     </Content>
@@ -117,6 +118,12 @@
     <Content Include="Layouts\css\settings.min.css">
       <DependentUpon>settings.css</DependentUpon>
     </Content>
+    <Content Include="Layouts\css\statistics.css">
+      <DependentUpon>statistics.less</DependentUpon>
+    </Content>
+    <Content Include="Layouts\css\statistics.min.css">
+      <DependentUpon>statistics.css</DependentUpon>
+    </Content>
     <Content Include="Layouts\js\common.js" />
     <Content Include="Layouts\js\libs\chart.min.js" />
     <Content Include="Layouts\css\overview.less" />
@@ -124,11 +131,15 @@
     <Content Include="Layouts\css\navigation.less" />
     <Content Include="Layouts\css\common.less" />
     <Content Include="Layouts\css\settings.less" />
+    <Content Include="Layouts\css\statistics.less" />
+    <Content Include="Layouts\css\chart.less" />
     <None Include="packages.config" />
+    <Content Include="Layouts\js\libs\jquery.daterangepicker.min.js" />
     <Content Include="Layouts\js\libs\jquery.min.js" />
     <Content Include="Layouts\js\libs\moment.min.js" />
     <Content Include="Layouts\js\navigation.js" />
     <Content Include="Layouts\js\settings.js" />
+    <Content Include="Layouts\js\statistics.js" />
     <Content Include="Pages\Master.Master" />
     <None Include="Properties\PublishProfiles\HydroLogger-Leon - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
@@ -152,6 +163,8 @@
   <ItemGroup>
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\DTO\BisonCollectionItem.cs" />
+    <Compile Include="Code\DTO\CollectionItem.cs" />
+    <Compile Include="Code\DTO\PositionDateRangeItem.cs" />
     <Compile Include="Code\DTO\UploaderConfigItem.cs" />
     <Compile Include="Code\DTO\QueryResultItem.cs" />
     <Compile Include="Code\DTO\HumitureItem.cs" />
@@ -204,9 +217,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Layouts\css\libs\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

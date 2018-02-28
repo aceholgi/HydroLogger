@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
 
 namespace HydroLogger.Pages
 {
@@ -6,7 +8,7 @@ namespace HydroLogger.Pages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-           
+
         }
     }
 }
