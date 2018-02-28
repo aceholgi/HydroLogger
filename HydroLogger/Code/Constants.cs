@@ -12,9 +12,18 @@
 
         public static class Database
         {
-            public static readonly string CollectionNamePrefix = "entries_";
-            public static readonly string SettingsCollection = "Settings";
-            public static readonly string LoggingCollection = "Logging";
+            public static readonly string HumiturePrefix = "entries_";
+            public static readonly string Settings = "Settings";
+            public static readonly string Logging = "Logging";
+
+            public enum CollectionType
+            {
+                All,
+                Humiture,
+                Settings,
+                Logging,
+                System
+            };
 
             public static class Fields
             {

@@ -12,8 +12,8 @@ namespace HydroLogger.Pages
     {
         private string _action = "";
         private string _uploaderId = "";
-        private float _temperature = -1;
-        private float _humidity = -1;
+        private float _temperature = -100;
+        private float _humidity = -100;
         private string _apisecret = "";
 
         private MongoManager mongoManager;
@@ -37,7 +37,7 @@ namespace HydroLogger.Pages
                 if (!string.IsNullOrEmpty(Request.Params.Get("apisecret")))
                     _apisecret = Request.Params.Get("apisecret");
 
-                if (string.IsNullOrEmpty(_action) || string.IsNullOrEmpty(_uploaderId) || string.IsNullOrEmpty(_apisecret) || _temperature == -1 || _humidity == -1)
+                if (string.IsNullOrEmpty(_action) || string.IsNullOrEmpty(_uploaderId) || string.IsNullOrEmpty(_apisecret) || _temperature == -100 || _humidity == -100)
                     return;
 
                 if (!AuthentificationManager.AuthenticateApi(_apisecret))
@@ -54,9 +54,9 @@ namespace HydroLogger.Pages
                         new BsonElement(Constants.Database.Fields.Humiture.Humidity, BsonValue.Create(_humidity))
                     };
 
-                    List<UploaderConfigItem> configItems =  mongoManager.SelectFromCollection(Constants.Database.SettingsCollection, FilterBuilder.UploaderConfig.BuildFilter(_uploaderId));
+                    List<UploaderConfigItem> configItems =  mongoManager.SelectFromCollection(new CollectionItem(Constants.Database.Settings), FilterBuilder.UploaderConfig.BuildFilter(_uploaderId));
                     if (configItems.Any())
-                        mongoManager.Insert(new BsonDocument(elements), Constants.Database.CollectionNamePrefix + configItems.FirstOrDefault().Position);
+                        mongoManager.Insert(new BsonDocument(elements), new CollectionItem(configItems.FirstOrDefault().Position));
                     else
                         LoggingManager.LogWaring("Cant find a Position for uploader with ID " + _uploaderId + ". Pleas add this Uploader to the Config. Value recieved is lost.", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
