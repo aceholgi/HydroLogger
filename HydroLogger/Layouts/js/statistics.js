@@ -27,6 +27,8 @@
             $('#dateRangePicker').dateRangePicker({
                 autoClose: true,
                 showShortcuts: true,
+                seperator: ' bis ',
+                startOfWeek: 'monday',
                 format: 'DD.MM.YYYY',  //more formats at http://momentjs.com/docs/#/displaying/format/
                 time: {
                     enabled: false
@@ -37,21 +39,28 @@
                     'prev': ['week', 'month', 'year'],
                     'next-days': null,
                     'next': null
+                },
+                getValue: function ()
+                {
+                    if ($('#dateRangePickerFrom').val() && $('#dateRangePickerTo').val())
+                        return $('#dateRangePickerFrom').val() + ' to ' + $('#dateRangePickerTo').val();
+                    else
+                        return '';
+                },
+                setValue: function (s, s1, s2)
+                {
+                    $('#dateRangePickerFrom').val(s1);
+                    $('#dateRangePickerTo').val(s2);
                 }
             })
                 .bind('datepicker-change', function (event, obj)
                 {
                     HydroLogger.Statistics.dateRange = obj;
+                });
 
-                    /* This event will be triggered when second date is selected */
-                    //console.log('change', obj);
-                    // obj will be something like this:
-                    // {
-                    // 		date1: (Date object of the earlier date),
-                    // 		date2: (Date object of the later date),
-                    //	 	value: "2013-06-05 to 2013-06-07"
-                    // }
-                })
+            //set defaults
+            document.getElementById("dateRangePickerFrom").value = "dd.mm.yyyy";
+            document.getElementById("dateRangePickerTo").value = "dd.mm.yyyy";
         },
         GetChartData: function ()
         {

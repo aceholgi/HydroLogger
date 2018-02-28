@@ -8,7 +8,7 @@
 <asp:Content ID="contentScripts" ContentPlaceHolderID="contentScripts" runat="server">
     <script src="../Layouts/js/libs/moment.min.js" defer></script>
     <script src="../Layouts/js/libs/jquery.daterangepicker.min.js" defer></script>
-        <script src="../Layouts/js/libs/chart.min.js" defer></script>
+    <script src="../Layouts/js/libs/chart.min.js" defer></script>
     <script src="../Layouts/js/statistics.js" defer></script>
 
     <script>
@@ -20,9 +20,23 @@
 </asp:Content>
 
 <asp:Content ID="contentBody" ContentPlaceHolderID="contentBody" runat="server">
-    <select id="positionDropDown"></select>
-    <input id="dateRangePicker" class="date-range-picker" />
-    <input type="button" value="Request" onclick="HydroLogger.Statistics.GetChartData()" />
+    <div class="filter">
+        <div class="property-container">
+            <span class="label">Position:</span>
+            <select id="positionDropDown"></select>
+        </div>
+        <div class="property-container">
+            <span class="label">Datum:</span>
+            <span id="dateRangePicker">
+                <input id="dateRangePickerFrom" class="date-range-picker" />
+                <span>Bis:</span>
+                <input id="dateRangePickerTo" class="date-range-picker" />
+            </span>
+        </div>
+        <div class="property-container">
+            <input class="button-filter"type="button" value="Filtern" onclick="HydroLogger.Statistics.GetChartData()" />
+        </div>
+    </div>
     <br />
     <div id="allChartContainer"></div>
 </asp:Content>

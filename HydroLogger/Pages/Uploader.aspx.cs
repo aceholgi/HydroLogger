@@ -56,7 +56,7 @@ namespace HydroLogger.Pages
 
                     List<UploaderConfigItem> configItems =  mongoManager.SelectFromCollection(new CollectionItem(Constants.Database.Settings), FilterBuilder.UploaderConfig.BuildFilter(_uploaderId));
                     if (configItems.Any())
-                        mongoManager.Insert(new BsonDocument(elements), new CollectionItem(configItems.FirstOrDefault().Position));
+                        mongoManager.Insert(new BsonDocument(elements), new CollectionItem(configItems.FirstOrDefault().Position, Constants.Database.CollectionType.Humiture));
                     else
                         LoggingManager.LogWaring("Cant find a Position for uploader with ID " + _uploaderId + ". Pleas add this Uploader to the Config. Value recieved is lost.", System.Reflection.MethodBase.GetCurrentMethod().Name);
 

@@ -4,6 +4,16 @@
   width: 80vw;
   margin-bottom: 20px;
 }
-.date-range-picker {
-  width: 160px;
+.filter .property-container {
+  margin-bottom: 7px;
+}
+.filter .property-container .label {
+  display: inline-block;
+  width: 150px;
+}
+.filter .property-container .date-range-picker {
+  width: 100px;
+}
+.filter .property-container .button-filter {
+  margin-left: 153px;
 }

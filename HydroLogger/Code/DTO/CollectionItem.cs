@@ -12,7 +12,7 @@ namespace HydroLogger.Code.DTO
 
         public CollectionItem(string name)
         {
-            Name = name;
+            Name = HttpUtility.HtmlDecode(name);
 
             if (Name == Constants.Database.Logging)
             {
@@ -43,7 +43,7 @@ namespace HydroLogger.Code.DTO
             {
                 case CollectionType.Humiture:
                     Type = type;
-                     
+                    Name = HttpUtility.HtmlDecode(fullEncodedName).Replace(Constants.Database.HumiturePrefix, "");
                     FullEncodedName = HttpUtility.HtmlEncode(Constants.Database.HumiturePrefix + fullEncodedName);  //#DoppeltHaletBesser                  
                     break;
                 default:
